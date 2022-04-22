@@ -1,12 +1,49 @@
-public class ArrayList implements List {
+import java.lang.reflect.Array;
 
-    @Override
-    public void add(Object element) {
+public class ArrayList<E> implements List<E> {
 
+    private E[] data;
+    private int size;
+
+    private static final int INIT_CAPACITY = 8;
+    private static final double RESIZE_KOEF = 1.5;
+
+    @SuppressWarnings("unchecked")
+    public ArrayList() {
+        data = (E[]) Array.newInstance(Object.class, INIT_CAPACITY);
+        size = 0;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void resize() {
+        int newSize = (int) (size * RESIZE_KOEF);
+        E[] newData = (E[]) Array.newInstance(Object.class, newSize);
+
+        for (int i = 0; i < data.length; i++) {
+            newData[i] = data[i];
+        }
+
+        data = newData;
+    }
+
+    private void shiftElements(int start, int end) {
+        for (int i = start; i < end - 1; i++) {
+            data[i] = data[i + 1];
+        }
     }
 
     @Override
-    public Object get(int idx) {
+    public void add(E element) {
+        if (size >= data.length) {
+            resize();
+        }
+
+        data[size] = element;
+        size++;
+    }
+
+    @Override
+    public E get(int idx) {
         return null;
     }
 
@@ -16,7 +53,7 @@ public class ArrayList implements List {
     }
 
     @Override
-    public boolean set(int idx, Object newValue) {
+    public boolean set(int idx, E newValue) {
         return false;
     }
 
@@ -26,17 +63,17 @@ public class ArrayList implements List {
     }
 
     @Override
-    public boolean removeFirst(Object element) {
+    public boolean removeFirst(E element) {
         return false;
     }
 
     @Override
-    public boolean removeLast(Object element) {
+    public boolean removeLast(E element) {
         return false;
     }
 
     @Override
-    public int indexOf(Object element) {
+    public int indexOf(E element) {
         return 0;
     }
 
@@ -46,7 +83,7 @@ public class ArrayList implements List {
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(E value) {
         return false;
     }
 }
