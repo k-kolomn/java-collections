@@ -45,7 +45,13 @@ public class ArrayList<E> implements List<E> {
     @Override
     // danya
     public E get(int idx) {
-        return null;
+        if (idx < data.length) {
+
+        }
+        else {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        return data[idx];
     }
 
     @Override
@@ -63,7 +69,7 @@ public class ArrayList<E> implements List<E> {
     @Override
     // danya
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -75,6 +81,7 @@ public class ArrayList<E> implements List<E> {
     @Override
     // danya
     public boolean removeLast(E element) {
+        int lastIndex = data.length - 1;
         return false;
     }
 
@@ -93,6 +100,6 @@ public class ArrayList<E> implements List<E> {
     @Override
     // danya
     public boolean contains(E value) {
-        return false;
+        return indexOf(value) >= 0;
     }
 }
