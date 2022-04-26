@@ -81,7 +81,12 @@ public class ArrayList<E> implements List<E> {
     @Override
     // danya
     public boolean removeLast(E element) {
-        int lastIndex = data.length - 1;
+        for (int i = data.length - 1; i > 0; i--) {
+            if (data[i] == element) {
+                data[i] = null;
+                return true;
+            }
+        }
         return false;
     }
 
