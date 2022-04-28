@@ -45,12 +45,6 @@ public class ArrayList<E> implements List<E> {
     @Override
     // danya
     public E get(int idx) {
-        if (idx < data.length) {
-
-        }
-        else {
-            throw new ArrayIndexOutOfBoundsException();
-        }
         return data[idx];
     }
 
