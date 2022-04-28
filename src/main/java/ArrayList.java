@@ -1,6 +1,6 @@
 import java.lang.reflect.Array;
 
-public class Al<E> implements List<E> {
+public class ArrayList<E> implements List<E>{
 
     private E[] data;
     private int size;
@@ -9,7 +9,7 @@ public class Al<E> implements List<E> {
     private static final double RESIZE_KOEF = 1.5;
 
     @SuppressWarnings("unchecked")
-    public Al() {
+    public ArrayList() {
         data = (E[]) Array.newInstance(Object.class, INIT_CAPACITY);
         size = 0;
     }
@@ -44,29 +44,21 @@ public class Al<E> implements List<E> {
 
     @Override
     // danya
-    public E get(int idx) {
-        return data[idx];
+    public E get(int index) {
+        if (index > data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+        return data[index];
     }
 
     @Override
     // zadanie so *
-    public boolean remove(int idx) {
-        if (idx < 0 || idx >= data.length) throw new ArrayIndexOutOfBoundsException();
-        try {
-                size--;
-                data[idx] = null;
-//            for (int i = idx; i < data.length; i++) {
-//                get(i);
-//                set(i, data[i + 1]);
-//                data[i + 1] = null;
-//                return true;
-//            }
-
-        } catch (Exception e) {
-        return false;
-        }
-        return false;
+     public boolean remove (int index){
+        if (index > data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+        size--;
+        System.arraycopy(data , 0,data, 0, index);
+        System.arraycopy(data, index + 1,data, index, data.length - index - 1);
+        return true;
     }
+
 
     @Override
     // kirill
@@ -74,7 +66,11 @@ public class Al<E> implements List<E> {
         if (idx < 0 || idx >= data.length) throw new ArrayIndexOutOfBoundsException();
         data[idx] = newValue;
         size++;
+        if (data[idx] != null) {
+            size--;
+        }
         return true;
+
     }
 
     @Override
