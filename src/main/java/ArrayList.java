@@ -1,9 +1,13 @@
 import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class ArrayList<E> implements List<E> {
 
     private E[] data;
     private int size;
+
+    private Comparator<E> comparator;
 
     private static final int INIT_CAPACITY = 8;
     private static final double RESIZE_KOEF = 1.5;
@@ -12,6 +16,14 @@ public class ArrayList<E> implements List<E> {
     public ArrayList() {
         data = (E[]) Array.newInstance(Object.class, INIT_CAPACITY);
         size = 0;
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList(Comparator<E> comparator) {
+        data = (E[]) Array.newInstance(Object.class, INIT_CAPACITY);
+        size = 0;
+
+        this.comparator = comparator;
     }
 
     @SuppressWarnings("unchecked")
@@ -124,5 +136,35 @@ public class ArrayList<E> implements List<E> {
             }
         }
         return false;
+    }
+
+    // class (o1, o2)
+    // o1.compareTo(o2)
+
+    public void sort() {
+        if (size == 0) return;
+
+        Comparator<E> comp;
+
+        if (comparator != null) {
+            comp = comparator;
+        } else if (data[0] instanceof Comparable) {
+            comp = (o1, o2) -> ((Comparable<E>) o1).compareTo(o2);
+        } else {
+            throw new RuntimeException("Expected declared Comparator or implemented Comparable interface!");
+        }
+
+        sorting(comp);
+    }
+
+    public void sort(Comparator<E> comparator) {
+        if (comparator == null) throw new RuntimeException("Comparator cannot be null!");
+        if (size == 0) return;
+
+        sorting(comparator);
+    }
+
+    private void sorting(Comparator<E> comparator) {
+        Arrays.sort(data, comparator);
     }
 }
