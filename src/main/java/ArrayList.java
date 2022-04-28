@@ -1,6 +1,6 @@
 import java.lang.reflect.Array;
 
-public class ArrayList<E> implements List<E> {
+public class ArrayList<E> implements List<E>{
 
     private E[] data;
     private int size;
@@ -44,55 +44,85 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     // danya
-    public E get(int idx) {
-        return null;
+    public E get(int index) {
+        if (index >= data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+        return data[index];
     }
 
     @Override
     // zadanie so *
-    public boolean remove(int idx) {
-        return false;
+     public boolean remove (int index){
+        if (index > data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+        System.arraycopy(data , 0,data, 0, index);
+        System.arraycopy(data, index + 1,data, index, data.length - index - 1);
+        size--;
+        return true;
     }
+
 
     @Override
     // kirill
-    public boolean set(int idx, E newValue) {
-        return false;
+    public boolean set(int index, E newValue) {
+        if (index > data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+        data[index] = newValue;
+        return true;
     }
 
     @Override
     // danya
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     // kirill
     public boolean removeFirst(E element) {
+        for (int i = 0; i < data.length; i++) {
+            if (data[i].equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
         return false;
     }
-
     @Override
     // danya
     public boolean removeLast(E element) {
+        for (int i = data.length - 1; i > 0; i--) {
+            if (data[i].equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     // kirill
     public int indexOf(E element) {
+        for (int i = 0; i < data.length; i++) {
+            if (data[i].equals(element)) {
+                return i;
+            }
+        }
         return 0;
     }
 
     @Override
     // kirill
     public boolean isEmpty() {
-        return false;
+        return size ==0;
     }
 
     @Override
     // danya
     public boolean contains(E value) {
+        for (int i = 0; i < data.length; i++) {
+            if (data[i].equals(value)) {
+                return true;
+            }
+        }
         return false;
+
     }
 }
