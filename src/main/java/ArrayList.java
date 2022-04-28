@@ -45,7 +45,7 @@ public class ArrayList<E> implements List<E>{
     @Override
     // danya
     public E get(int index) {
-        if (index > data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+        if (index >= data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
         return data[index];
     }
 
@@ -53,24 +53,19 @@ public class ArrayList<E> implements List<E>{
     // zadanie so *
      public boolean remove (int index){
         if (index > data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
-        size--;
         System.arraycopy(data , 0,data, 0, index);
         System.arraycopy(data, index + 1,data, index, data.length - index - 1);
+        size--;
         return true;
     }
 
 
     @Override
     // kirill
-    public boolean set(int idx, E newValue) {
-        if (idx < 0 || idx >= data.length) throw new ArrayIndexOutOfBoundsException();
-        data[idx] = newValue;
-        size++;
-        if (data[idx] != null) {
-            size--;
-        }
+    public boolean set(int index, E newValue) {
+        if (index > data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+        data[index] = newValue;
         return true;
-
     }
 
     @Override
@@ -83,7 +78,7 @@ public class ArrayList<E> implements List<E>{
     // kirill
     public boolean removeFirst(E element) {
         for (int i = 0; i < data.length; i++) {
-            if (data[i] == element) {
+            if (data[i].equals(element)) {
                 remove(i);
                 return true;
             }
@@ -94,7 +89,7 @@ public class ArrayList<E> implements List<E>{
     // danya
     public boolean removeLast(E element) {
         for (int i = data.length - 1; i > 0; i--) {
-            if (data[i] == element) {
+            if (data[i].equals(element)) {
                 remove(i);
                 return true;
             }
@@ -106,7 +101,7 @@ public class ArrayList<E> implements List<E>{
     // kirill
     public int indexOf(E element) {
         for (int i = 0; i < data.length; i++) {
-            if (data[i] == element) {
+            if (data[i].equals(element)) {
                 return i;
             }
         }
@@ -123,7 +118,7 @@ public class ArrayList<E> implements List<E>{
     // danya
     public boolean contains(E value) {
         for (int i = 0; i < data.length; i++) {
-            if (data[i] == value) {
+            if (data[i].equals(value)) {
                 return true;
             }
         }
