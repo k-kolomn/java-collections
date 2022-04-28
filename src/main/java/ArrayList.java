@@ -1,6 +1,6 @@
 import java.lang.reflect.Array;
 
-public class ArrayList<E> implements List<E>{
+public class ArrayList<E> implements List<E> {
 
     private E[] data;
     private int size;
@@ -19,17 +19,9 @@ public class ArrayList<E> implements List<E>{
         int newSize = (int) (size * RESIZE_KOEF);
         E[] newData = (E[]) Array.newInstance(Object.class, newSize);
 
-        for (int i = 0; i < data.length; i++) {
-            newData[i] = data[i];
-        }
+        System.arraycopy(data, 0, newData, 0, data.length);
 
         data = newData;
-    }
-
-    private void shiftElements(int start, int end) {
-        for (int i = start; i < end - 1; i++) {
-            data[i] = data[i + 1];
-        }
     }
 
     @Override
@@ -42,41 +34,50 @@ public class ArrayList<E> implements List<E>{
         size++;
     }
 
-    @Override
-    // danya
-    public E get(int index) {
+    private void checkIndex(int index) {
         if (index >= data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+    }
+
+    @Override
+    public E get(int index) {
+        checkIndex(index);
         return data[index];
     }
 
     @Override
-    // zadanie so *
      public boolean remove (int index){
-        if (index > data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
-        System.arraycopy(data , 0,data, 0, index);
-        System.arraycopy(data, index + 1,data, index, data.length - index - 1);
-        size--;
-        return true;
+        checkIndex(index);
+        try {
+            System.arraycopy(data , 0,data, 0, index);
+            System.arraycopy(data, index + 1,data, index, data.length - index - 1);
+            size--;
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 
     @Override
-    // kirill
     public boolean set(int index, E newValue) {
-        if (index > data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+        checkIndex(index);
+        checkValue(newValue);
         data[index] = newValue;
         return true;
     }
 
     @Override
-    // danya
     public int size() {
-        return size;
+        return this.size;
+    }
+
+    private void checkValue(E element) {
+        if (element == null) throw new RuntimeException("Null elements is not allowed!");
     }
 
     @Override
-    // kirill
     public boolean removeFirst(E element) {
+        checkValue(element);
         for (int i = 0; i < data.length; i++) {
             if (data[i].equals(element)) {
                 remove(i);
@@ -85,9 +86,10 @@ public class ArrayList<E> implements List<E>{
         }
         return false;
     }
+
     @Override
-    // danya
     public boolean removeLast(E element) {
+        checkValue(element);
         for (int i = data.length - 1; i > 0; i--) {
             if (data[i].equals(element)) {
                 remove(i);
@@ -98,8 +100,8 @@ public class ArrayList<E> implements List<E>{
     }
 
     @Override
-    // kirill
     public int indexOf(E element) {
+        checkValue(element);
         for (int i = 0; i < data.length; i++) {
             if (data[i].equals(element)) {
                 return i;
@@ -109,20 +111,18 @@ public class ArrayList<E> implements List<E>{
     }
 
     @Override
-    // kirill
     public boolean isEmpty() {
-        return size ==0;
+        return size == 0;
     }
 
     @Override
-    // danya
     public boolean contains(E value) {
-        for (int i = 0; i < data.length; i++) {
-            if (data[i].equals(value)) {
+        checkValue(value);
+        for (E e : data) {
+            if (e.equals(value)) {
                 return true;
             }
         }
         return false;
-
     }
 }
