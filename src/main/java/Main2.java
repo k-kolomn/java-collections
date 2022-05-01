@@ -1,7 +1,7 @@
 public class Main2 {
     public static void main(String[] args) {
         // Function -> for one data type -> example:
-                // a + 1; a * 2; a / 4
+        // a + 1; a * 2; a / 4
         // int -> double
 
 
@@ -27,7 +27,6 @@ public class Main2 {
         );
 
 
-
         // Predicate -> Предсказание (Условие)
         Predicate<Integer> integerIsOdd = (i) -> i % 2 == 0;
 
@@ -41,12 +40,12 @@ public class Main2 {
 }
 
 @FunctionalInterface
-interface Function <T, R> {
+interface Function<T, R> {
     R apply(T t);
 }
 
 @FunctionalInterface
-interface IntFunction <T> {
+interface IntFunction<T> {
     T apply(int i);
 }
 
@@ -64,3 +63,36 @@ interface Producer<T> {
 interface Predicate<T> {
     boolean test(T t);
 }
+
+/*
+Operator, BiOperator, ThreeOperator
+*/
+@FunctionalInterface
+interface BiFunction<T, R, U> {
+    R apply(T t, U u);
+}
+@FunctionalInterface
+interface ThreeFunction<T, E, R, U> {
+    R apply(T t, E e, R r, U u);
+}
+
+@FunctionalInterface
+interface BiConsumer<T ,U>{
+    void accept(T t, U u);
+}
+
+@FunctionalInterface
+interface ThreeConsumer<T, U ,E>{
+    void accept(T t, U u , E e);
+}
+
+@FunctionalInterface
+interface BiPredicate<T, U>{
+    boolean test(T t, U u);
+}
+
+@FunctionalInterface
+interface ThreePredicate<T, U, E>{
+    boolean test(T t , U u, E e);
+}
+
