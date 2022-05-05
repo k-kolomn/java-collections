@@ -36,6 +36,8 @@ public class Main2 {
             printInt.accept(a);
         }
 
+
+
     }
 }
 
@@ -68,12 +70,12 @@ interface Predicate<T> {
 Operator, BiOperator, ThreeOperator
 */
 @FunctionalInterface
-interface BiFunction<T, R, U> {
+interface BiFunction<T, U, R> {
     R apply(T t, U u);
 }
 @FunctionalInterface
-interface ThreeFunction<T, E, R, U> {
-    R apply(T t, E e, R r, U u);
+interface ThreeFunction<T, E, U, R> {
+    R apply(T t, E e, U u);
 }
 
 @FunctionalInterface
@@ -98,11 +100,15 @@ interface ThreePredicate<T, U, E>{
 
 
 @FunctionalInterface
-interface Operator<T> {
-    T operate(T t);
+interface UnaryOperator<T> {
+    T apply(T t);
 }
 
 @FunctionalInterface
-interface BiOperator<T> {
-    T operate(T t1, T t2);
+interface BinaryOperator<T> {
+    T apply(T t1, T t2);
+}
+
+interface TernaryOperator<T> {
+    T apply(T t1, T t2, T t3);
 }
