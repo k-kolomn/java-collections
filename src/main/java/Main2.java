@@ -1,3 +1,6 @@
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class Main2 {
     public static void main(String[] args) {
         // Function -> for one data type -> example:
@@ -20,7 +23,7 @@ public class Main2 {
 
 
         // Producer -> Производитель
-        Producer<Double> producer = () -> Math.random();
+        Supplier<Double> producer = () -> Math.random();
 
         printDouble.accept(
                 producer.get()
@@ -36,7 +39,36 @@ public class Main2 {
             printInt.accept(a);
         }
 
+        Function<Integer, String> func1 = i -> String.valueOf(i);   // 12 -> "12"
+        Function<String, Integer> func2 = s -> s.length();          // "12" -> 2
+        var func3 = func1.andThen(func2);      // func1 -> func2 -> res
+        var func4 = func2.compose(func1);      // func1 -> func2 -> res
 
+        // a.andThen(b) = b.compose(a)
+
+//        java.util.function.Function
+
+        // 1, 2 ... 30
+        // key -> value
+
+        Stream.iterate(0, i -> i < 30, i -> i++)
+                .collect(Collectors.toMap(
+                        i -> i,
+                        i -> func3.apply(i)
+                ));
+
+        Stream.generate(() -> (int) (Math.random() * 100))
+                .limit(100)
+                .forEach(System.out::println);
+
+        int aa = 12;
+        var result1 = func3.apply(aa);
+        var result2 = func4.apply(aa);
+
+        System.out.println(result1); //
+        System.out.println(result2); //
+
+        // Function, Operator, Consumer, Supplier, Predicate
 
     }
 }
@@ -44,6 +76,16 @@ public class Main2 {
 @FunctionalInterface
 interface Function <T, R> {
     R apply(T t);
+
+    default <U> Function<T, U> andThen(Function<R, U> another) {
+        return (t) -> another.apply(apply(t));
+    }
+
+    default <U> Function<U, R> compose(Function<U, T> another) {
+        return (t) -> apply(another.apply(t));
+    }
+
+    static <T> Function<T, T> identity() { return t -> t; }
 }
 
 @FunctionalInterface
@@ -57,7 +99,7 @@ interface Consumer<T> {
 }
 
 @FunctionalInterface
-interface Producer<T> {
+interface Supplier<T> {
     T get();
 }
 
