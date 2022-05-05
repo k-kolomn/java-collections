@@ -64,3 +64,13 @@ interface Producer<T> {
 interface Predicate<T> {
     boolean test(T t);
 }
+
+@FunctionalInterface
+interface Operator<T> {
+    T operate(T t);
+}
+
+@FunctionalInterface
+interface BiOperator<T> {
+    T operate(T t1, T t2);
+}
