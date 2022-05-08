@@ -136,7 +136,7 @@ interface Predicate<T> {
     }
 
     default Predicate<T> or(Predicate<T> another) {
-        return (t) -> another.test(t) || test(t);
+        return (t) -> test(t) || another.test(t);
     }
 
     default  Predicate<T> negate(){
@@ -178,9 +178,20 @@ interface ThreePredicate<T, U, E> {
     boolean test(T t, U u, E e);
 }
 
-interface Operator<T> extends Function {
-    void accept(T t);
+interface Operator<T> {
+    T accept(T t);
 
+    default Operator<T> andThen(Operator<T> another) {
+        return (t) -> another.accept(accept(t));
+    }
+
+    default Operator<T> compose(Operator<T> another) {
+        return (t) -> accept(another.accept(t));
+    }
+
+    default Operator<T> identity() {
+        return (t) -> t;
+    }
 }
 
 @FunctionalInterface
