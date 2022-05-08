@@ -1,11 +1,16 @@
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import jdk.incubator.vector.VectorOperators;
+
+import javax.security.auth.Subject;
+
 public class Main2 {
     public static void main(String[] args) {
         // Function -> for one data type -> example:
         // a + 1; a * 2; a / 4
         // int -> double
+
 
 
         Function<Integer, Double> divBy2 = i -> ((double) i) / 2.0;
@@ -96,16 +101,49 @@ interface IntFunction <T> {
 @FunctionalInterface
 interface Consumer<T> {
     void accept(T t);
+
+    default Consumer<T> andThen(Consumer<T> another){
+        return (t) -> {accept(t); another.accept(t);};
+    }
+
+    default Consumer<T> compose(Consumer<T> another){
+        return (t) -> {another.accept(t); accept(t);};
+    }
+
+
+    static Consumer identity(){
+        return t -> t;
+    }
 }
 
 @FunctionalInterface
 interface Supplier<T> {
     T get();
+
+    default Supplier<T> andThen(Supplier<T> another){
+        return (t) -> {get(); another.get();};
+    }
+    default Supplier<T> compose(Supplier<T> another){
+        return (t) -> get(); && another.get();
+    }
+    static Supplier<T> identity(){
+        return t-> t;
+    }
 }
 
 @FunctionalInterface
 interface Predicate<T> {
     boolean test(T t);
+
+    default Predicate<T> andThen(Predicate<T> another){
+        return (t) -> test(t) && another.test(t);
+    }
+    default Predicate<T> compose(Predicate<T> another){
+        return (t) -> another.test(t) && test(t);
+    }
+    static Predicate<T> identity(){
+        return t -> t;
+    }
 }
 
 /*
@@ -140,6 +178,17 @@ interface ThreePredicate<T, U, E>{
     boolean test(T t , U u, E e);
 }
 
+interface Operator<T> extends Function{
+    void accept(T t);
+
+    default Operator<T> andThen(Operator<T> another){
+        return (t) -> accept(T t) && another.accept(t); ;
+    }
+    default Operator<T> compose(Operator<T> another){
+        return (t) -> another.accept(accept(t));
+    }
+
+}
 
 @FunctionalInterface
 interface UnaryOperator<T> {
