@@ -187,15 +187,20 @@ public class ArrayList<E> implements List<E> {
         return true;
     }
 
-    // TODO: 08.05.2022 fix this shit
     @Override
     public boolean removeIf(Predicate<E> predicate) {
-        for (int i = 0; i < size; i++) {
-            if (predicate.test(data[i])) {
+        int i = 0;
+        while (i < size) {
+            E e = data[i];
+
+            if (predicate.test(e)) {
                 remove(i);
+            } else {
+                i++;
             }
         }
-        return false;
+
+        return true;
     }
 
     @Override
