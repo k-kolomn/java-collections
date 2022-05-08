@@ -12,7 +12,6 @@ public class Main2 {
         // int -> double
 
 
-
         Function<Integer, Double> divBy2 = i -> ((double) i) / 2.0;
 
         IntFunction<Double> intToDouble = i -> i * 1.0;
@@ -79,7 +78,7 @@ public class Main2 {
 }
 
 @FunctionalInterface
-interface Function <T, R> {
+interface Function<T, R> {
     R apply(T t);
 
     default <U> Function<T, U> andThen(Function<R, U> another) {
@@ -90,61 +89,61 @@ interface Function <T, R> {
         return (t) -> apply(another.apply(t));
     }
 
-    static <T> Function<T, T> identity() { return t -> t; }
+    static <T> Function<T, T> identity() {
+        return t -> t;
+    }
 }
 
 @FunctionalInterface
-interface IntFunction <T> {
+interface IntFunction<T> {
     T apply(int i);
+
+
 }
 
 @FunctionalInterface
 interface Consumer<T> {
     void accept(T t);
 
-    default Consumer<T> andThen(Consumer<T> another){
-        return (t) -> {accept(t); another.accept(t);};
+    default Consumer<T> andThen(Consumer<T> another) {
+        return (t) -> {
+            accept(t);
+            another.accept(t);
+        };
     }
 
-    default Consumer<T> compose(Consumer<T> another){
-        return (t) -> {another.accept(t); accept(t);};
+    default Consumer<T> compose(Consumer<T> another) {
+        return (t) -> {
+            another.accept(t);
+            accept(t);
+        };
     }
 
 
-    static Consumer identity(){
-        return t -> t;
-    }
 }
 
 @FunctionalInterface
 interface Supplier<T> {
     T get();
-
-    default Supplier<T> andThen(Supplier<T> another){
-        return (t) -> {get(); another.get();};
-    }
-    default Supplier<T> compose(Supplier<T> another){
-        return (t) -> get(); && another.get();
-    }
-    static Supplier<T> identity(){
-        return t-> t;
-    }
 }
 
 @FunctionalInterface
 interface Predicate<T> {
     boolean test(T t);
 
-    default Predicate<T> andThen(Predicate<T> another){
+    default Predicate<T> and(Predicate<T> another) {
         return (t) -> test(t) && another.test(t);
     }
-    default Predicate<T> compose(Predicate<T> another){
-        return (t) -> another.test(t) && test(t);
+
+    default Predicate<T> or(Predicate<T> another) {
+        return (t) -> another.test(t) || test(t);
     }
-    static Predicate<T> identity(){
-        return t -> t;
+
+    default  Predicate<T> negate(){
+        return (t) -> !test(t);
     }
 }
+
 
 /*
 Operator, BiOperator, ThreeOperator
@@ -153,40 +152,34 @@ Operator, BiOperator, ThreeOperator
 interface BiFunction<T, U, R> {
     R apply(T t, U u);
 }
+
 @FunctionalInterface
 interface ThreeFunction<T, E, U, R> {
     R apply(T t, E e, U u);
 }
 
 @FunctionalInterface
-interface BiConsumer<T ,U>{
+interface BiConsumer<T, U> {
     void accept(T t, U u);
 }
 
 @FunctionalInterface
-interface ThreeConsumer<T, U ,E>{
-    void accept(T t, U u , E e);
+interface ThreeConsumer<T, U, E> {
+    void accept(T t, U u, E e);
 }
 
 @FunctionalInterface
-interface BiPredicate<T, U>{
+interface BiPredicate<T, U> {
     boolean test(T t, U u);
 }
 
 @FunctionalInterface
-interface ThreePredicate<T, U, E>{
-    boolean test(T t , U u, E e);
+interface ThreePredicate<T, U, E> {
+    boolean test(T t, U u, E e);
 }
 
-interface Operator<T> extends Function{
+interface Operator<T> extends Function {
     void accept(T t);
-
-    default Operator<T> andThen(Operator<T> another){
-        return (t) -> accept(T t) && another.accept(t); ;
-    }
-    default Operator<T> compose(Operator<T> another){
-        return (t) -> another.accept(accept(t));
-    }
 
 }
 
