@@ -29,7 +29,7 @@ public interface List <E> {
 
     boolean removeIfPresent(E elem);
 
-    boolean addAndProcess(Consumer<E> consumer);
+    boolean addAndProcess(E elem, Consumer<E> consumer);
 
     boolean processIf(Predicate<E> predicate, Consumer<E> consumer);
 
