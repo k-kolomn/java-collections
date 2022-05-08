@@ -1,8 +1,6 @@
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jdk.incubator.vector.VectorOperators;
-
 import javax.security.auth.Subject;
 
 public class Main2 {

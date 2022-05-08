@@ -19,6 +19,10 @@ public interface List <E> {
 
     boolean contains(E value);
 
+
+
+
+
     boolean changeAll(Operator<E> operator);
 
     boolean changeIf(Predicate<E> predicate, Operator<E> operator);

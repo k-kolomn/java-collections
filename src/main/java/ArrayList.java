@@ -57,11 +57,11 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-     public boolean remove (int index){
+    public boolean remove(int index) {
         checkIndex(index);
         try {
-            System.arraycopy(data , 0,data, 0, index);
-            System.arraycopy(data, index + 1,data, index, data.length - index - 1);
+            System.arraycopy(data, 0, data, 0, index);
+            System.arraycopy(data, index + 1, data, index, data.length - index - 1);
             size--;
             return true;
         } catch (Exception e) {
@@ -166,5 +166,99 @@ public class ArrayList<E> implements List<E> {
 
     private void sorting(Comparator<E> comparator) {
         Arrays.sort(data, comparator);
+    }
+
+
+    @Override
+    public boolean changeAll(Operator<E> operator) {
+        for (int i = 0; i < size; i++) {
+            data[i] = operator.accept(data[i]);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean changeIf(Predicate<E> predicate, Operator<E> operator) {
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(data[i])) {
+                data[i] = operator.accept(data[i]);
+            }
+        }
+        return true;
+    }
+
+    // TODO: 08.05.2022 fix this shit
+    @Override
+    public boolean removeIf(Predicate<E> predicate) {
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(data[i])) {
+                remove(i);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void forEach(Consumer<E> consumer) {
+        for (int i = 0; i < size; i++) {
+            consumer.accept(data[i]);
+        }
+    }
+
+    @Override
+    public boolean removeIfPresent(E elem) {
+        if (contains(elem)) {
+            removeFirst(elem);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addAndProcess(E elem, Consumer<E> consumer) {
+        add(elem);
+        consumer.accept(elem);
+        return true;
+    }
+
+    @Override
+    public boolean processIf(Predicate<E> predicate, Consumer<E> consumer) {
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(data[i])) {
+                consumer.accept(data[i]);
+            }
+
+        }
+        return true;
+    }
+
+    @Override
+    public <P> List<P> transform(Function<E, P> transformFunction) {
+        ArrayList<P> temp = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            temp.add(transformFunction.apply(data[i]));
+        }
+        return temp;
+    }
+
+    @Override
+    public <P> List<P> transform(Predicate<E> predicate, Function<E, P> transformFunction) {
+        ArrayList<P> temp = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(data[i])) {
+                temp.add(transformFunction.apply(data[i]));
+            }
+        }
+        return temp;
+    }
+
+    @Override
+    public E reduce(BinaryOperator<E> reduceOperator) {
+        if (size == 0) return null;
+        E result = data[0];
+        for (int i = 1; i < size; i++) {
+            result = reduceOperator.apply(result, data[i]);
+        }
+        return result;
     }
 }
