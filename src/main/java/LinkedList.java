@@ -1,7 +1,7 @@
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class LinkedList<E> implements List<E>{
+public class LinkedList<E> implements List<E> {
 
     private Node<E> head;
     private Node<E> tail;
@@ -31,23 +31,36 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
-    public E get(int idx) {
-        return null;
+    public E get(int index) {
+       checkIndex(index);
+        if (index == 0) return head.getData();
+        if (index == size - 1) return tail.getData();
+        return getNode(index).getData();
+    }
+
+    private void checkIndex(int index) {
+        if (index >= size || index < 0) throw new IndexOutOfBoundsException("index " + index + " is out of bounds");
     }
 
     @Override
-    public boolean remove(int idx) {
-        return false;
+    public boolean remove(int index) {
+        checkIndex(index);
+        var variable = getNode(index);
+        //variable is not null.
+        // getPrevious(), getNext() -> linkNodes()
+
+        return true;
     }
 
     @Override
     public boolean set(int idx, E newValue) {
-        return false;
+        getNode(idx).setData(newValue);
+        return true;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -67,7 +80,7 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
@@ -125,6 +138,30 @@ public class LinkedList<E> implements List<E>{
         return null;
     }
 
+    private Node<E> getNode(int index){
+        int counter;
+        if (index < size / 2) {
+            counter = 0;
+            var currentNode = head;
+            while (currentNode != null) {
+                if (index == counter) {
+                    return currentNode;
+                }
+                currentNode = currentNode.getNext();
+                counter++;
+            }
+        } else {
+            counter = size - 1;
+            var currentNode = tail;
+            while (currentNode != null) {
+                if (index == counter) {
+                    return currentNode;
+                }
+                currentNode = currentNode.getPrevious();
+                counter--;
+            }
+        }
+    }
     @Data
     @NoArgsConstructor
     public static class Node<T> {
@@ -134,7 +171,7 @@ public class LinkedList<E> implements List<E>{
         private Node<T> previous;
 
         public Node(T data) {
-            this.data= data;
+            this.data = data;
         }
     }
 }
