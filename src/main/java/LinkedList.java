@@ -32,7 +32,7 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public E get(int index) {
-       checkIndex(index);
+        checkIndex(index);
         if (index == 0) return head.getData();
         if (index == size - 1) return tail.getData();
         return getNode(index).getData();
@@ -85,60 +85,98 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean contains(E value) {
+        for (int i = 0; i < size; i++) {
+            if (get(i).equals(value)) return true;
+        }
+
         return false;
     }
 
     @Override
     public boolean changeAll(Operator<E> operator) {
-        return false;
+        for (int i = 0; i < size; i++) {
+            getNode(i).setData(operator.accept(get(i)));
+        }
+        return true;
     }
 
     @Override
     public boolean changeIf(Predicate<E> predicate, Operator<E> operator) {
-        return false;
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(get(i))) {
+                getNode(i).setData(operator.accept(get(i)));
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean removeIf(Predicate<E> predicate) {
-        return false;
+        for (int i = 0; i <size ; i++) {
+            if (predicate.test(get(i))){
+                remove(i);
+            }
+        }
+
+        return true;
     }
 
     @Override
     public void forEach(Consumer<E> consumer) {
-
+        for (int i = 0; i < size; i++) {
+            consumer.accept(get(i));
+        }
     }
 
     @Override
     public boolean removeIfPresent(E elem) {
+        if (contains(elem)){
+            removeFirst(elem);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean addAndProcess(E elem, Consumer<E> consumer) {
-        return false;
+        add(elem);
+        consumer.accept(elem);
+        return true;
     }
 
     @Override
     public boolean processIf(Predicate<E> predicate, Consumer<E> consumer) {
-        return false;
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(get(i)))   {
+                consumer.accept(get(i));
+            }
+        }
+        return true;
     }
 
     @Override
     public <P> List<P> transform(Function<E, P> transformFunction) {
+
         return null;
     }
 
     @Override
     public <P> List<P> transform(Predicate<E> predicate, Function<E, P> transformFunction) {
+
         return null;
     }
 
     @Override
     public E reduce(BinaryOperator<E> reduceOperator) {
+        if (size ==0) return null;
+        E result = head.getData();
+        for (int i = 1; i < size; i++) {
+            reduceOperator.apply(result, get(i));
+        }
         return null;
     }
 
-    private Node<E> getNode(int index){
+    private Node<E> getNode(int index) {
         int counter;
         if (index < size / 2) {
             counter = 0;
@@ -161,7 +199,9 @@ public class LinkedList<E> implements List<E> {
                 counter--;
             }
         }
+        return null;
     }
+
     @Data
     @NoArgsConstructor
     public static class Node<T> {
