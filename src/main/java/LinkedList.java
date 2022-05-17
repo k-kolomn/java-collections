@@ -1,13 +1,33 @@
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 public class LinkedList<E> implements List<E>{
 
     private Node<E> head;
     private Node<E> tail;
 
+    private int size;
+
     @Override
     public void add(E element) {
+        var newNode = new Node<>(element);
 
+        if (size == 0) {
+            head = newNode;
+            tail = newNode;
+
+            linkNodes(head, tail);
+        } else {
+            linkNodes(tail, newNode);
+            tail = newNode;
+        }
+
+        size++;
+    }
+
+    private void linkNodes(Node<E> first, Node<E> second) {
+        first.setNext(second);
+        second.setPrevious(first);
     }
 
     @Override
@@ -106,10 +126,15 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Data
+    @NoArgsConstructor
     public static class Node<T> {
         private T data;
 
         private Node<T> next;
         private Node<T> previous;
+
+        public Node(T data) {
+            this.data= data;
+        }
     }
 }
