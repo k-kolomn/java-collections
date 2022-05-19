@@ -55,6 +55,9 @@ public class LinkedList<E> implements List<E> {
             var currentNode = getNode(index);
             linkNodes(currentNode.getPrevious(), currentNode.getNext());
         }
+
+        size--;
+
         return true;
     }
 
