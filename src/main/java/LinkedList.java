@@ -46,10 +46,13 @@ public class LinkedList<E> implements List<E> {
     public boolean remove(int index) {
         checkIndex(index);
         var variable = getNode(index);
-        //variable is not null.
-        // getPrevious(), getNext() -> linkNodes()
+        if (variable == null){
+            return false;
+        } else{
+            linkNodes(variable.getPrevious(), variable.getNext());
+        }
 
-        return true;
+        return false;
     }
 
     @Override
@@ -63,18 +66,52 @@ public class LinkedList<E> implements List<E> {
         return size;
     }
 
+
+
     @Override
     public boolean removeFirst(E element) {
-        return false;
+        for (int i = 0; i < size; i++) {
+            var getI = get(i);
+            if (getI.equals(element)){
+                if (getI.equals(head)){
+                        linkNodes(head, head.getNext());
+                        remove(i);
+                } else if (getI.equals(tail)){
+                    linkNodes(tail, tail.getPrevious());
+                    remove(i);
+                } else{
+                    remove(i);
+                }
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean removeLast(E element) {
-        return false;
+        for (int i = size -1; i > 0; i--) {
+            var getI = get(i);
+            if (getI.equals(element)){
+                if (getI.equals(head)){
+                    linkNodes(head, head.getNext());
+                    remove(i);
+                } else if (getI.equals(tail)){
+                    linkNodes(tail, tail.getPrevious());
+                    remove(i);
+                } else{
+                    remove(i);
+                }
+            }
+        }
+        return true;
     }
 
     @Override
     public int indexOf(E element) {
+        int counter = 0;
+        while(getNode(counter).getData().equals(element)){
+            return counter;
+        }
         return 0;
     }
 
@@ -201,6 +238,10 @@ public class LinkedList<E> implements List<E> {
         }
         return null;
     }
+
+        public  E pop(){
+        return removeFirst();
+        }
 
     @Data
     @NoArgsConstructor
