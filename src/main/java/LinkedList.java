@@ -45,18 +45,24 @@ public class LinkedList<E> implements List<E> {
     @Override
     public boolean remove(int index) {
         checkIndex(index);
-        var variable = getNode(index);
-        if (variable == null){
-            return false;
-        } else{
-            linkNodes(variable.getPrevious(), variable.getNext());
-        }
+        // check if its last remaining node in the list
+            // clear()
+        // check if its head node
+            // head -> head.next()
+        // check if its tail node
+            // tail -> tail.previous()
 
-        return false;
+        var currentNode = getNode(index);
+
+
+        linkNodes(currentNode.getPrevious(), currentNode.getNext());
+
+        return true;
     }
 
     @Override
     public boolean set(int idx, E newValue) {
+        checkIndex(idx);
         getNode(idx).setData(newValue);
         return true;
     }
@@ -67,52 +73,58 @@ public class LinkedList<E> implements List<E> {
     }
 
 
-
     @Override
     public boolean removeFirst(E element) {
+        if (size == 0) return false;
+
+        if (head.getData().equals(element)) {
+            return remove(0);
+        }
+
         for (int i = 0; i < size; i++) {
-            var getI = get(i);
-            if (getI.equals(element)){
-                if (getI.equals(head)){
-                        linkNodes(head, head.getNext());
-                        remove(i);
-                } else if (getI.equals(tail)){
-                    linkNodes(tail, tail.getPrevious());
-                    remove(i);
-                } else{
-                    remove(i);
-                }
+            var currentNode = getNode(i);
+            if (currentNode.getData().equals(element)) {
+                return remove(i);
             }
         }
-        return true;
+
+        return false;
     }
 
     @Override
     public boolean removeLast(E element) {
-        for (int i = size -1; i > 0; i--) {
-            var getI = get(i);
-            if (getI.equals(element)){
-                if (getI.equals(head)){
-                    linkNodes(head, head.getNext());
-                    remove(i);
-                } else if (getI.equals(tail)){
-                    linkNodes(tail, tail.getPrevious());
-                    remove(i);
-                } else{
-                    remove(i);
-                }
+        if (size == 0) return false;
+
+        if (tail.getData().equals(element)) {
+            return remove(size - 1);
+        }
+
+        for (int i = size - 1; i >= 0; i--) {
+            var currentNode = getNode(i);
+            if (currentNode.getData().equals(element)) {
+                return remove(i);
             }
         }
-        return true;
+
+        return false;
     }
 
     @Override
     public int indexOf(E element) {
+        if (size == 0) return -1;
+
         int counter = 0;
-        while(getNode(counter).getData().equals(element)){
-            return counter;
+        var currentNode = head;
+        while (currentNode != null) {
+            if (currentNode.getData().equals(element)) {
+                return counter;
+            }
+
+            counter++;
+            currentNode = currentNode.getNext();
         }
-        return 0;
+
+        return -1;
     }
 
     @Override
@@ -122,17 +134,24 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean contains(E value) {
-        for (int i = 0; i < size; i++) {
-            if (get(i).equals(value)) return true;
-        }
+        return indexOf(value) != -1;
+    }
 
-        return false;
+    @Override
+    public void clear() {
+        head = null;
+        tail = null;
     }
 
     @Override
     public boolean changeAll(Operator<E> operator) {
         for (int i = 0; i < size; i++) {
-            getNode(i).setData(operator.accept(get(i)));
+            var currentNode = getNode(i);
+            currentNode.setData(
+                    operator.accept(
+                            currentNode.getData()
+                    )
+            );
         }
         return true;
     }
@@ -140,8 +159,14 @@ public class LinkedList<E> implements List<E> {
     @Override
     public boolean changeIf(Predicate<E> predicate, Operator<E> operator) {
         for (int i = 0; i < size; i++) {
-            if (predicate.test(get(i))) {
-                getNode(i).setData(operator.accept(get(i)));
+            var currentNode = getNode(i);
+
+            if (predicate.test(currentNode.getData())) {
+                currentNode.setData(
+                        operator.accept(
+                                currentNode.getData()
+                        )
+                );
             }
         }
         return true;
@@ -149,8 +174,8 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean removeIf(Predicate<E> predicate) {
-        for (int i = 0; i <size ; i++) {
-            if (predicate.test(get(i))){
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(get(i))) {
                 remove(i);
             }
         }
@@ -167,7 +192,7 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean removeIfPresent(E elem) {
-        if (contains(elem)){
+        if (contains(elem)) {
             removeFirst(elem);
             return true;
         }
@@ -184,8 +209,10 @@ public class LinkedList<E> implements List<E> {
     @Override
     public boolean processIf(Predicate<E> predicate, Consumer<E> consumer) {
         for (int i = 0; i < size; i++) {
-            if (predicate.test(get(i)))   {
-                consumer.accept(get(i));
+            var currentNode = getNode(i);
+
+            if (predicate.test(currentNode.getData())) {
+                consumer.accept(currentNode.getData());
             }
         }
         return true;
@@ -205,12 +232,12 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public E reduce(BinaryOperator<E> reduceOperator) {
-        if (size ==0) return null;
+        if (size == 0) return null;
         E result = head.getData();
         for (int i = 1; i < size; i++) {
             reduceOperator.apply(result, get(i));
         }
-        return null;
+        return result;
     }
 
     private Node<E> getNode(int index) {
@@ -236,12 +263,9 @@ public class LinkedList<E> implements List<E> {
                 counter--;
             }
         }
-        return null;
-    }
 
-        public  E pop(){
-        return removeFirst();
-        }
+        throw new RuntimeException("Node not found!");
+    }
 
     @Data
     @NoArgsConstructor
