@@ -1,6 +1,3 @@
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class Main3 {
     public static void main(String[] args) {
         LinkedList.Node<Integer> head = new LinkedList.Node<>();
