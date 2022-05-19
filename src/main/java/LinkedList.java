@@ -45,18 +45,16 @@ public class LinkedList<E> implements List<E> {
     @Override
     public boolean remove(int index) {
         checkIndex(index);
-        // check if its last remaining node in the list
-            // clear()
-        // check if its head node
-            // head -> head.next()
-        // check if its tail node
-            // tail -> tail.previous()
-
-        var currentNode = getNode(index);
-
-
-        linkNodes(currentNode.getPrevious(), currentNode.getNext());
-
+        if (size == 1) {
+            clear();
+        } else if (index == 0) {
+            head = head.getNext();
+        } else if (index == size - 1) {
+            tail = tail.getPrevious();
+        } else {
+            var currentNode = getNode(index);
+            linkNodes(currentNode.getPrevious(), currentNode.getNext());
+        }
         return true;
     }
 
