@@ -138,6 +138,11 @@ public class ArrayList<E> implements List<E> {
         return false;
     }
 
+    @Override
+    public void clear() {
+        size = 0;
+    }
+
     // class (o1, o2)
     // o1.compareTo(o2)
 
