@@ -58,6 +58,9 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean remove(int index) {
+        if (size == 0){
+            return false;
+        }
         checkIndex(index);
         try {
             System.arraycopy(data, 0, data, 0, index);
@@ -90,7 +93,7 @@ public class ArrayList<E> implements List<E> {
     @Override
     public boolean removeFirst(E element) {
         checkValue(element);
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < size; i++) {
             if (data[i].equals(element)) {
                 remove(i);
                 return true;
@@ -102,7 +105,7 @@ public class ArrayList<E> implements List<E> {
     @Override
     public boolean removeLast(E element) {
         checkValue(element);
-        for (int i = data.length - 1; i > 0; i--) {
+        for (int i = size - 1; i > 0; i--) {
             if (data[i].equals(element)) {
                 remove(i);
                 return true;
