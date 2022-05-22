@@ -1,6 +1,9 @@
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Comparator;
+import java.util.Iterator;
+
 public class LinkedList<E> implements List<E> {
 
     private Node<E> head;
@@ -9,7 +12,7 @@ public class LinkedList<E> implements List<E> {
     private int size;
 
     @Override
-    public void add(E element) {
+    public boolean add(E element) {
         var newNode = new Node<>(element);
 
         if (size == 0) {
@@ -23,11 +26,33 @@ public class LinkedList<E> implements List<E> {
         }
 
         size++;
+
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
     }
 
     private void linkNodes(Node<E> first, Node<E> second) {
         first.setNext(second);
         second.setPrevious(first);
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> collection) {
+        return false;
+    }
+
+    @Override
+    public void replaceAll(Operator<E> operator) {
+
+    }
+
+    @Override
+    public void sort(Comparator<? super E> comparator) {
+
     }
 
     @Override
@@ -43,29 +68,45 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
-    public boolean remove(int index) {
+    public E remove(int index) {
         checkIndex(index);
+
+        E old;
+
         if (size == 1) {
+            old = head.getData();
             clear();
         } else if (index == 0) {
+            old = head.getData();
             head = head.getNext();
         } else if (index == size - 1) {
+            old = tail.getData();
             tail = tail.getPrevious();
         } else {
             var currentNode = getNode(index);
+            old = currentNode.getData();
             linkNodes(currentNode.getPrevious(), currentNode.getNext());
         }
 
         size--;
 
-        return true;
+        return old;
     }
 
     @Override
-    public boolean set(int idx, E newValue) {
+    public E set(int idx, E newValue) {
         checkIndex(idx);
-        getNode(idx).setData(newValue);
-        return true;
+
+        var currentNode = getNode(idx);
+        var old = currentNode.getData();
+        currentNode.setData(newValue);
+
+        return old;
+    }
+
+    @Override
+    public void add(int index, E value) {
+
     }
 
     @Override
@@ -79,13 +120,15 @@ public class LinkedList<E> implements List<E> {
         if (size == 0) return false;
 
         if (head.getData().equals(element)) {
-            return remove(0);
+            remove(0);
+            return true;
         }
 
         for (int i = 0; i < size; i++) {
             var currentNode = getNode(i);
             if (currentNode.getData().equals(element)) {
-                return remove(i);
+                remove(i);
+                return true;
             }
         }
 
@@ -97,21 +140,30 @@ public class LinkedList<E> implements List<E> {
         if (size == 0) return false;
 
         if (tail.getData().equals(element)) {
-            return remove(size - 1);
+            remove(size - 1);
+            return true;
         }
 
         for (int i = size - 1; i >= 0; i--) {
             var currentNode = getNode(i);
             if (currentNode.getData().equals(element)) {
-                return remove(i);
+                remove(i);
+                return true;
             }
         }
 
         return false;
     }
 
+    private E checkAndCastValue(Object o) {
+        if (o == null) throw new NullPointerException("Null elements is not allowed!");
+        return (E) o;
+    }
+
     @Override
-    public int indexOf(E element) {
+    public int indexOf(Object o) {
+        var element = checkAndCastValue(o);
+
         if (size == 0) return -1;
 
         int counter = 0;
@@ -129,13 +181,78 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
+    public int lastIndexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public List<E> sublist(int start, int end) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e1, E e2) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e1, E e2, E e3) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e1, E e2, E e3, E e4) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e1, E e2, E e3, E e4, E e5) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E... values) {
+        return null;
+    }
+
+    @Override
+    public List<E> copy() {
+        return null;
+    }
+
+    @Override
+    public List<E> copyOf(Collection<? extends E> collection) {
+        return null;
+    }
+
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
     @Override
-    public boolean contains(E value) {
-        return indexOf(value) != -1;
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return indexOf(o) != -1;
+    }
+
+    @Override
+    public Object toArray() {
+        return null;
+    }
+
+    @Override
+    public E toArray(E[] array) {
+        return null;
     }
 
     @Override
@@ -176,7 +293,7 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
-    public boolean removeIf(Predicate<E> predicate) {
+    public boolean removeIf(Predicate<? super E> predicate) {
         for (int i = 0; i < size; i++) {
             if (predicate.test(get(i))) {
                 remove(i);
@@ -184,6 +301,11 @@ public class LinkedList<E> implements List<E> {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> collection) {
+        return false;
     }
 
     @Override
@@ -210,7 +332,7 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
-    public boolean processIf(Predicate<E> predicate, Consumer<E> consumer) {
+    public boolean forEachIf(Predicate<E> predicate, Consumer<E> consumer) {
         for (int i = 0; i < size; i++) {
             var currentNode = getNode(i);
 

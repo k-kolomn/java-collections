@@ -221,7 +221,7 @@ public class LinkedListTest {
 
         AtomicBoolean flag = new AtomicBoolean(false);
 
-        list.processIf(e -> e == 3, e -> flag.set(true));
+        list.forEachIf(e -> e == 3, e -> flag.set(true));
 
         Assertions.assertEquals(2, list.size());
         Assertions.assertTrue(flag.get());

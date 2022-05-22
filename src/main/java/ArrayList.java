@@ -1,6 +1,7 @@
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ArrayList<E> implements List<E> {
@@ -8,7 +9,7 @@ public class ArrayList<E> implements List<E> {
     private E[] data;
     private int size;
 
-    private Comparator<E> comparator;
+    private Comparator<? super E> comparator;
 
     private static final int INIT_CAPACITY = 8;
     private static final double RESIZE_KOEF = 1.5;
@@ -20,7 +21,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList(Comparator<E> comparator) {
+    public ArrayList(Comparator<? super E> comparator) {
         data = (E[]) Array.newInstance(Object.class, INIT_CAPACITY);
         size = 0;
 
@@ -38,7 +39,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public void add(E element) {
+    public boolean add(E element) {
         checkValue(element);
         if (size >= data.length) {
             resize();
@@ -46,6 +47,13 @@ public class ArrayList<E> implements List<E> {
 
         data[size] = element;
         size++;
+
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
     }
 
     private void checkIndex(int index) {
@@ -64,25 +72,35 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public boolean remove(int index) {
+    public E remove(int index) {
         checkIndex(index);
         try {
+            var value = data[index];
             System.arraycopy(data, 0, data, 0, index);
             System.arraycopy(data, index + 1, data, index, data.length - index - 1);
             size--;
-            return true;
+
+            return value;
         } catch (Exception e) {
-            return false;
+            return null;
         }
     }
 
 
     @Override
-    public boolean set(int index, E newValue) {
+    public E set(int index, E newValue) {
         checkIndex(index);
         checkValue(newValue);
+
+        var old = data[index];
+
         data[index] = newValue;
-        return true;
+        return old;
+    }
+
+    @Override
+    public void add(int index, E value) {
+
     }
 
     @Override
@@ -90,8 +108,18 @@ public class ArrayList<E> implements List<E> {
         return this.size;
     }
 
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
     private void checkValue(E element) {
         if (element == null) throw new NullPointerException("Null elements is not allowed!");
+    }
+
+    private E checkAndCastValue(Object o) {
+        if (o == null) throw new NullPointerException("Null elements is not allowed!");
+        return (E) o;
     }
 
     @Override
@@ -119,30 +147,94 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public int indexOf(E element) {
-        checkValue(element);
+    public int indexOf(Object o) {
+        var element = checkAndCastValue(o);
+
         for (int i = 0; i < data.length; i++) {
             if (data[i].equals(element)) {
                 return i;
             }
         }
-        return 0;
+        return -1;
     }
 
     @Override
-    public boolean isEmpty() {
-        return size == 0;
+    public int lastIndexOf(Object o) {
+        var element = checkAndCastValue(o);
+
+        for (int i = data.length - 1; i >= 0; i--) {
+            if (data[i].equals(element)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     @Override
-    public boolean contains(E value) {
-        checkValue(value);
+    public List<E> sublist(int start, int end) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e1, E e2) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e1, E e2, E e3) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e1, E e2, E e3, E e4) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E e1, E e2, E e3, E e4, E e5) {
+        return null;
+    }
+
+    @Override
+    public List<E> of(E... values) {
+        return null;
+    }
+
+    @Override
+    public List<E> copy() {
+        return null;
+    }
+
+    @Override
+    public List<E> copyOf(Collection<? extends E> collection) {
+        return null;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        var value = checkAndCastValue(o);
         for (E e : data) {
             if (e.equals(value)) {
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public Object toArray() {
+        return null;
+    }
+
+    @Override
+    public E toArray(E[] array) {
+        return null;
     }
 
     @Override
@@ -153,7 +245,7 @@ public class ArrayList<E> implements List<E> {
     public void sort() {
         if (size == 0) return;
 
-        Comparator<E> comp;
+        Comparator<? super E> comp;
 
         if (comparator != null) {
             comp = comparator;
@@ -166,14 +258,25 @@ public class ArrayList<E> implements List<E> {
         sorting(comp);
     }
 
-    public void sort(Comparator<E> comparator) {
+    @Override
+    public boolean addAll(int index, Collection<? extends E> collection) {
+        return false;
+    }
+
+    @Override
+    public void replaceAll(Operator<E> operator) {
+
+    }
+
+    @Override
+    public void sort(Comparator<? super E> comparator) {
         if (comparator == null) throw new RuntimeException("Comparator cannot be null!");
         if (size == 0) return;
 
         sorting(comparator);
     }
 
-    private void sorting(Comparator<E> comparator) {
+    private void sorting(Comparator<? super E> comparator) {
         Arrays.sort(data, comparator);
     }
 
@@ -204,7 +307,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public boolean removeIf(Predicate<E> predicate) {
+    public boolean removeIf(Predicate<? super E> predicate) {
         int i = 0;
         while (i < size) {
             E e = data[i];
@@ -217,6 +320,11 @@ public class ArrayList<E> implements List<E> {
         }
 
         return true;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> collection) {
+        return false;
     }
 
     @Override
@@ -243,7 +351,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public boolean processIf(Predicate<E> predicate, Consumer<E> consumer) {
+    public boolean forEachIf(Predicate<E> predicate, Consumer<E> consumer) {
         for (int i = 0; i < size; i++) {
             if (predicate.test(data[i])) {
                 consumer.accept(data[i]);
