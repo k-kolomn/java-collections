@@ -142,6 +142,7 @@ public class LinkedList<E> implements List<E> {
     public void clear() {
         head = null;
         tail = null;
+        size = 0;
     }
 
     @Override
@@ -154,6 +155,7 @@ public class LinkedList<E> implements List<E> {
                     )
             );
         }
+        size++;
         return true;
     }
 
@@ -221,14 +223,23 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public <P> List<P> transform(Function<E, P> transformFunction) {
-
-        return null;
+        LinkedList<P> list = new LinkedList<>();
+        for (int i = 0; i < size; i++) {
+            list.add(transformFunction.apply(get(i)));
+        }
+        return list;
     }
 
     @Override
     public <P> List<P> transform(Predicate<E> predicate, Function<E, P> transformFunction) {
+        LinkedList<P> list = new LinkedList<>();
+        for (int i = 0; i < size; i++) {
+            var currentNode = getNode(i);
+            if (predicate.test(currentNode.getData()))
+            list.add(transformFunction.apply(currentNode.getData()));
+        }
 
-        return null;
+        return list;
     }
 
     @Override
