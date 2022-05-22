@@ -137,12 +137,9 @@ public class ArrayListTest {
     public void testClearElement() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
+        list.add(1);
         list.clear();
         Assertions.assertEquals(0, list.size());
-//        assertThatThrownBy(() -> {
-//            list.clear();
-//            list.clear();
-//        });
     }
 
     @Test
