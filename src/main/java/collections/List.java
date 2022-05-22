@@ -1,10 +1,18 @@
+package collections;
+
+import function.BinaryOperator;
+import function.Consumer;
+import function.Function;
+import function.Predicate;
+import function.UnaryOperator;
+
 import java.util.Comparator;
 
 public interface List <E> extends Collection<E> {
 
     boolean addAll(int index, Collection<? extends E> collection);
 
-    void replaceAll(Operator<E> operator);
+    void replaceAll(UnaryOperator<E> operator);
 
     void sort(Comparator<? super E> comparator);
 
@@ -22,14 +30,6 @@ public interface List <E> extends Collection<E> {
 
     List<E> sublist(int start, int end);
 
-    List<E> of(E e);
-    List<E> of(E e1, E e2);
-    List<E> of(E e1, E e2, E e3);
-    List<E> of(E e1, E e2, E e3, E e4);
-    List<E> of(E e1, E e2, E e3, E e4, E e5);
-
-    List<E> of(E ... values);
-
     List<E> copy();
 
     List<E> copyOf(Collection<? extends E> collection);
@@ -40,9 +40,9 @@ public interface List <E> extends Collection<E> {
     boolean removeLast(E element);
 
 
-    boolean changeAll(Operator<E> operator);
+    boolean changeAll(UnaryOperator<E> operator);
 
-    boolean changeIf(Predicate<E> predicate, Operator<E> operator);
+    boolean changeIf(Predicate<E> predicate, UnaryOperator<E> operator);
 
     void forEach(Consumer<E> consumer);
 

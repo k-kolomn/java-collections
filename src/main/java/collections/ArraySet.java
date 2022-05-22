@@ -1,3 +1,7 @@
+package collections;
+
+import function.Predicate;
+
 import java.util.Iterator;
 
 public class ArraySet<E> implements Set<E>{
@@ -64,52 +68,12 @@ public class ArraySet<E> implements Set<E>{
         arrayList.clear();
     }
 
-    @Override
-    public Set<E> of() {
-        return null;
-    }
-
-    @Override
-    public Set<E> of(E e) {
-        return null;
-    }
-
-    @Override
-    public Set<E> of(E e1, E e2) {
-        return null;
-    }
-
-    @Override
-    public Set<E> of(E e1, E e2, E e3) {
-        return null;
-    }
-
 
     public Set<E> copy() {
         ArraySet<E> arraySet = new ArraySet<>();
         arraySet.addAll(arrayList);
         return arraySet;
     }
-        @Override
-        public Set<E> of(E e1, E e2, E e3, E e4) {
-            return null;
-        }
-
-        @Override
-        public Set<E> of(E e1, E e2, E e3, E e4, E e5) {
-            return null;
-        }
-
-        @Override
-        public Set<E> of(E e1, E e2, E e3, E e4, E e5, E e6) {
-            return null;
-        }
-
-        @Override
-        public Set<E> of(E... values) {
-            return null;
-        }
-
 
 
     @Override
