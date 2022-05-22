@@ -1,6 +1,7 @@
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 public class ArrayList<E> implements List<E> {
 
@@ -38,6 +39,7 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public void add(E element) {
+        checkValue(element);
         if (size >= data.length) {
             resize();
         }
@@ -47,7 +49,12 @@ public class ArrayList<E> implements List<E> {
     }
 
     private void checkIndex(int index) {
-        if (index >= data.length || index < 0) throw new ArrayIndexOutOfBoundsException();
+        if (size == 0) {
+            throw new NoSuchElementException("List is empty!");
+        }
+        if (index >= data.length || index < 0) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " is out of bounds!");
+        }
     }
 
     @Override
@@ -58,9 +65,6 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean remove(int index) {
-        if (size == 0){
-            return false;
-        }
         checkIndex(index);
         try {
             System.arraycopy(data, 0, data, 0, index);
@@ -87,7 +91,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     private void checkValue(E element) {
-        if (element == null) throw new RuntimeException("Null elements is not allowed!");
+        if (element == null) throw new NullPointerException("Null elements is not allowed!");
     }
 
     @Override
@@ -146,9 +150,6 @@ public class ArrayList<E> implements List<E> {
         size = 0;
     }
 
-    // class (o1, o2)
-    // o1.compareTo(o2)
-
     public void sort() {
         if (size == 0) return;
 
@@ -178,10 +179,17 @@ public class ArrayList<E> implements List<E> {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean changeAll(Operator<E> operator) {
+        ArrayList<E> list = new ArrayList<>();
+
         for (int i = 0; i < size; i++) {
-            data[i] = operator.accept(data[i]);
+            list.add(operator.accept(data[i]));
         }
+
+        clear();
+        addAll(list);
+
         return true;
     }
 

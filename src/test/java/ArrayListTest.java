@@ -9,10 +9,12 @@ public class ArrayListTest {
         list.add(1);
         list.add(2);
         Assertions.assertEquals(2, list.size());
-//        assertThatThrownBy(() -> {
-//            list.add(10);
-//            list.add(11);
-//        });
+    }
+
+    @Test
+    public void testAddNullElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.add(null));
     }
 
     @Test
@@ -21,10 +23,12 @@ public class ArrayListTest {
         list.add(1);
         int listGet = list.get(0);
         Assertions.assertEquals(1, listGet);
-        assertThatThrownBy(() -> {
-            list.get(10);
-            list.get(11);
-        });
+    }
+
+    @Test
+    public void testGetElementThatDoesNotExist() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.get(1));
     }
 
     @Test
@@ -34,10 +38,24 @@ public class ArrayListTest {
         list.add(2);
         list.remove(0);
         Assertions.assertEquals(1, list.size());
-        assertThatThrownBy(() -> {
-            list.remove(10);
-            list.remove(11);
-        });
+    }
+
+    @Test
+    public void testRemoveElementThatDoesNotExist() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.remove(1));
+    }
+
+    @Test
+    public void testRemoveFirstElementParamEqNull() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.removeFirst(null));
+    }
+
+    @Test
+    public void testRemoveLastElementParamEqNull() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.removeLast(null));
     }
 
     @Test
@@ -46,22 +64,12 @@ public class ArrayListTest {
         list.add(1);
         list.set(0, 2);
         Assertions.assertEquals(2, list.get(0));
-        assertThatThrownBy(() -> {
-            list.set(10, 10);
-            list.set(11, 11);
-        });
     }
 
     @Test
-    public void testSizeElement() {
+    public void testSetElementThatDoesNotExist() {
         ArrayList<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        Assertions.assertEquals(2, list.size());
-//        assertThatThrownBy(() -> {
-//            list.size();
-//            list.size();
-//        });
+        assertThatThrownBy(() -> list.set(1, 1));
     }
 
     @Test
@@ -73,10 +81,6 @@ public class ArrayListTest {
         list.removeFirst(1);
         Assertions.assertEquals(2, list.size());
         Assertions.assertEquals(2, list.get(0));
-//        assertThatThrownBy(() -> {
-//            list.removeFirst(10);
-//            list.removeFirst(11);
-//        });
     }
 
     @Test
@@ -88,10 +92,6 @@ public class ArrayListTest {
         list.removeLast(1);
         Assertions.assertEquals(2, list.size());
         Assertions.assertEquals(1, list.get(0));
-//        assertThatThrownBy(() -> {
-//            list.removeLast(10);
-//            list.removeLast(11);
-//        });
     }
 
     @Test

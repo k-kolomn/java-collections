@@ -1,6 +1,12 @@
 public interface List <E> {
     void add(E element);
 
+    default void addAll(List<E> list) {
+        for (int i = 0; i < this.size(); i++) {
+            this.add(list.get(i));
+        }
+    }
+
     E get(int idx);
 
     boolean remove(int idx);
