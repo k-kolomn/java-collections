@@ -2,9 +2,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class LinkedListTest {
     @Test
@@ -173,20 +172,20 @@ public class LinkedListTest {
         Assertions.assertEquals(2, list.get(0));
     }
 
-    @Test
-    public void testForEach(){
-        LinkedList<Integer> list = new LinkedList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-
-        AtomicInteger counter = new AtomicInteger(0);
-
-        list.forEach(
-                e -> counter.incrementAndGet()
-        );
-        Assertions.assertEquals(list.size(), counter.get());
-    }
+//    @Test
+//    public void testForEach(){
+//        LinkedList<Integer> list = new LinkedList<>();
+//        list.add(1);
+//        list.add(2);
+//        list.add(3);
+//
+//        AtomicInteger counter = new AtomicInteger(0);
+//
+//        list.forEach(
+//                e -> counter.incrementAndGet()
+//        );
+//        Assertions.assertEquals(list.size(), counter.get());
+//    }
 
 
     @Test
