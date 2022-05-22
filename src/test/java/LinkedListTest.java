@@ -1,40 +1,28 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static org.assertj.core.api.Assertions.*;
 
 public class LinkedListTest {
     @Test
     public void testAddElement() {
-        // create or get instance of testing object
         ArrayList<Integer> list = new ArrayList<>();
-
-        // action (do things that should be tested)
         list.add(1);
-
-        // assertion
         Assertions.assertEquals(1, list.size());
     }
 
     @Test
     public void testRemoveElement() {
-
         LinkedList<Integer> list = new LinkedList<>();
-
         list.add(1);
         list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-        list.add(1);
-
-
-        list.remove(4);
-        list.remove(4);
-        list.remove(2);
         list.remove(1);
 
-
-        Assertions.assertEquals(2, list.size());
+        Assertions.assertEquals(1, list.size());
+        // TODO: 22.05.22 extract to another test method
         assertThatThrownBy(() -> list.remove(10));
     }
 
@@ -44,6 +32,7 @@ public class LinkedListTest {
 
         LinkedList<Integer> list = new LinkedList<>();
 
+        // TODO: 22.05.22 remove unnecessary million element adding
         list.add(23);
         list.add(43);
 
@@ -184,18 +173,20 @@ public class LinkedListTest {
         Assertions.assertEquals(2, list.get(0));
     }
 
-//    @Test
-//    public void testForEach(){
-//        LinkedList<Integer> list = new LinkedList<>();
-//
-//        list.add(1);
-//        list.add(2);
-//
-//        list.forEach(
-//             e -> e.intValue()
-//        );
-//        Assertions.assertEquals(1, 1);
-//    }
+    @Test
+    public void testForEach(){
+        LinkedList<Integer> list = new LinkedList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        AtomicInteger counter = new AtomicInteger(0);
+
+        list.forEach(
+                e -> counter.incrementAndGet()
+        );
+        Assertions.assertEquals(list.size(), counter.get());
+    }
 
 
     @Test
@@ -212,23 +203,28 @@ public class LinkedListTest {
     }
 
     @Test
-    public void testAddAndProccess() {
+    public void testAddAndProcess() {
         LinkedList<Integer> list = new LinkedList<>();
 
         list.add(1);
-        list.addAndProcess(2, e -> e.doubleValue());
+        list.addAndProcess(2, e -> Assertions.assertEquals(2, e));
 
         Assertions.assertEquals(2, list.get(1));
     }
 
     @Test
-    public void testProccesIf() {
+    public void testProcessIf() {
         LinkedList<Integer> list = new LinkedList<>();
 
         list.add(1);
         list.add(3);
 
-        Assertions.assertEquals(    list.processIf(e -> e == 3, Integer::intValue), true);
+        AtomicBoolean flag = new AtomicBoolean(false);
+
+        list.processIf(e -> e == 3, e -> flag.set(true));
+
+        Assertions.assertEquals(2, list.size());
+        Assertions.assertTrue(flag.get());
     }
 
     @Test
@@ -238,25 +234,39 @@ public class LinkedListTest {
         list.add(1);
         list.add(3);
 
+        var newList = list.transform(i -> i.doubleValue());
 
-            Assertions.assertEquals(1,   list.transform(e -> {
-                for (int i = 0; i < list.size(); i++) {
-                    e = list.get(i);
-                }
-                return e;
-            }));
-
+        Assertions.assertEquals(list.size(), newList.size());
+        Assertions.assertInstanceOf(Double.class, newList.get(0));
+        Assertions.assertEquals(3.0, newList.get(1));
     }
 
+    @Test
+    public void testReduce(){
+        LinkedList<Integer> list = new LinkedList<>();
 
-//    public void testReduce(){
-//        LinkedList<Integer> list = new LinkedList<>();
-//
-//        list.add(1);
-//        list.add(3);
-//        list.reduce((e,u) -> e.compareTo(u));
-//
-//        Assertions.assertEquals(1, list.size());
-//    }
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        var result = list.reduce(Integer::sum);
+
+        Assertions.assertEquals(10, result);
+    }
+
+    @Test
+    public void testReduceOverflowByte() {
+        LinkedList<Byte> list = new LinkedList<>();
+        list.add((byte) 120);
+        list.add((byte) 7);
+
+        var result = list.reduce((a, b) -> (byte) (a + b));
+        Assertions.assertEquals(Byte.MAX_VALUE, result);
+
+        list.add((byte) 1);
+        result = list.reduce((a, b) -> (byte) (a + b));
+        Assertions.assertEquals(Byte.MIN_VALUE, result);
+    }
 
 }

@@ -114,7 +114,7 @@ public class ArrayListTest {
         list.add(1);
         list.add(2);
         boolean isEmpty = list.isEmpty();
-        Assertions.assertEquals(false, isEmpty);
+        Assertions.assertFalse(isEmpty);
 //        assertThatThrownBy(() -> {
 //            list.isEmpty();
 //            list.isEmpty();
@@ -126,7 +126,7 @@ public class ArrayListTest {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
         boolean contains = list.contains(1);
-        Assertions.assertEquals(true, contains);
+        Assertions.assertTrue(contains);
         assertThatThrownBy(() -> {
             list.contains(2);
             list.contains(3);
@@ -150,12 +150,11 @@ public class ArrayListTest {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
-        list.add(3);
-//        boolean changeAll = list.changeAll();
-//        Assertions.assertEquals(, changeAll);
-//        assertThatThrownBy(() -> {
-//
-//        });
+
+        list.changeAll(i -> i + 1);
+
+        Assertions.assertEquals(2, list.get(0));
+        Assertions.assertEquals(3, list.get(1));
     }
 
     @Test

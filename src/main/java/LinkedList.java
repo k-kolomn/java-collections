@@ -235,8 +235,9 @@ public class LinkedList<E> implements List<E> {
         LinkedList<P> list = new LinkedList<>();
         for (int i = 0; i < size; i++) {
             var currentNode = getNode(i);
-            if (predicate.test(currentNode.getData()))
-            list.add(transformFunction.apply(currentNode.getData()));
+            if (predicate.test(currentNode.getData())) {
+                list.add(transformFunction.apply(currentNode.getData()));
+            }
         }
 
         return list;
@@ -247,7 +248,7 @@ public class LinkedList<E> implements List<E> {
         if (size == 0) return null;
         E result = head.getData();
         for (int i = 1; i < size; i++) {
-            reduceOperator.apply(result, get(i));
+            result = reduceOperator.apply(result, get(i));
         }
         return result;
     }
