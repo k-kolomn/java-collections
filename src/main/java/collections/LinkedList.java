@@ -34,14 +34,21 @@ public class LinkedList<E> implements List<E> {
     public Object toArray() {
         Object[] result = new Object[size];
         int i = 0;
-        for (Node<E> x = head; x != null; x = x.next)
+        for (Node<E> x = head; x != null; x = x.next) {
             result[i++] = x.data;
+        }
         return result;
     }
 
     @Override
     public E toArray(E[] array) {
-
+                int i =0;
+                for (Node<E> x = head; x != null; x=x.next){
+                    var result = array[i++];
+                    array[i++] = x.data;
+                    x.data = result;
+                    return result;
+                }
         return null;
     }
 
@@ -71,7 +78,7 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean remove(Object o) {
-            return false;
+        return false;
     }
 
     private E checkAndCastValue(Object o) {
@@ -105,17 +112,24 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> collection) {
+        checkIndex(index);
+
         return false;
     }
 
     @Override
     public void replaceAll(UnaryOperator<E> operator) {
-
+        for (int i = 0; i < size; i++) {
+            operator.accept(get(i));
+        }
     }
 
     @Override
     public void sort(Comparator<? super E> comparator) {
-
+        for (int i = 0; i < size; i++) {
+            var currentNode = getNode(i);
+            comparator.compare(currentNode.getData(), currentNode.next.getData());
+        }
     }
 
     @Override
@@ -139,6 +153,8 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public void add(int index, E value) {
+        //diffucul and ne ponyatno
+
 
     }
 
@@ -194,7 +210,21 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        var element = checkAndCastValue(o);
+
+        if (size == 0) return -1;
+
+        int counter = size -1;
+        var currentNode = tail;
+        while (currentNode != null) {
+            if (currentNode.getData().equals(o)) {
+                return counter;
+            }
+
+            counter--;
+            currentNode = currentNode.getPrevious();
+        }
+        return -1;
     }
 
     @Override
@@ -291,7 +321,7 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean removeIfPresent(E elem) {
-        if (contains(elem)){
+        if (contains(elem)) {
             removeFirst(elem);
             return true;
         }
@@ -348,7 +378,6 @@ public class LinkedList<E> implements List<E> {
         }
         return result;
     }
-
 
 
     private Node<E> getNode(int index) {
