@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Random;
 
 public class LinkedList<E> implements List<E> {
 
@@ -15,6 +16,22 @@ public class LinkedList<E> implements List<E> {
 
     private int size;
 
+    private Comparator<? super E> comparator;
+
+    public LinkedList() {
+        size = 0;
+        head = null;
+        tail = null;
+    }
+
+    public LinkedList(Comparator<? super E> comparator) {
+        this.comparator = comparator;
+        size = 0;
+        head = null;
+        tail = null;
+
+    }
+
 
     @Override
     public int size() {
@@ -22,7 +39,30 @@ public class LinkedList<E> implements List<E> {
     }
 
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<>() {
+            private Node<E> iterator;
+
+            private boolean flag = true;
+
+            @Override
+            public boolean hasNext() {
+                if (flag && head != null) return true;
+
+                return iterator != null;
+            }
+
+            @Override
+            public E next() {
+                if (flag) {
+                    flag = false;
+                    iterator = head;
+                }
+
+                E data = iterator.getData();
+                iterator = iterator.getNext();
+                return data;
+            }
+        };
     }
 
     @Override
@@ -41,14 +81,8 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
-    public E toArray(E[] array) {
-                int i =0;
-                for (Node<E> x = head; x != null; x=x.next){
-                    var result = array[i++];
-                    array[i++] = x.data;
-                    x.data = result;
-                    return result;
-                }
+    public E[] toArray(E[] array) {
+
         return null;
     }
 
@@ -58,8 +92,8 @@ public class LinkedList<E> implements List<E> {
 
         if (size == 0) {
             head = newNode;
+        } else if (size == 1) {
             tail = newNode;
-
             linkNodes(head, tail);
         } else {
             linkNodes(tail, newNode);
@@ -77,13 +111,9 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean remove(Object o) {
-        return false;
-    }
-
-    private E checkAndCastValue(Object o) {
-        if (o == null) throw new NullPointerException("Null elements is not allowed!");
-        return (E) o;
+        return removeFirst((E) o);
     }
 
     @Override
@@ -118,6 +148,14 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
+    public boolean addAll(Collection<? extends E> collection) {
+        for (E e : collection) {
+            add(e);
+        }
+        return true;
+    }
+
+    @Override
     public void replaceAll(UnaryOperator<E> operator) {
         for (int i = 0; i < size; i++) {
             operator.accept(get(i));
@@ -126,10 +164,83 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public void sort(Comparator<? super E> comparator) {
-        for (int i = 0; i < size; i++) {
-            var currentNode = getNode(i);
-            comparator.compare(currentNode.getData(), currentNode.next.getData());
+        sorting(comparator);
+    }
+
+    @Override
+    public void sort() {
+        Comparator<? super E> comp;
+
+        if (comparator != null) {
+            comp = comparator;
+        } else if (size > 0 && head.getData() instanceof Comparable<?>) {
+            comp = (a, b) -> ((Comparable<E>) a).compareTo(b);
+        } else {
+            throw new IllegalArgumentException(
+                    "No comparator found and items does not implement Comparable!"
+            );
         }
+
+        sorting(comp);
+    }
+
+    private void sorting(Comparator<? super E> comp) {
+        var sorted = sortingRecursively((LinkedList<E>) copy(), comp);
+        clear();
+        addAll(sorted);
+    }
+
+    private LinkedList<E> sortingRecursively(LinkedList<E> origin, Comparator<? super E> comp) {
+        if (origin.isEmpty() || origin.size() == 1) return origin;
+        if (origin.size() == 2) {
+            var first = origin.get(0);
+            var second = origin.get(1);
+
+            LinkedList<E> result = new LinkedList<>();
+
+            if (comp.compare(first, second) > 0) {
+                result.add(second);
+                result.add(first);
+            } else {
+                result.add(first);
+                result.add(second);
+            }
+
+            return result;
+
+        }
+
+        LinkedList<E> result = new LinkedList<>();
+
+        int t = origin.size() - 1;
+
+        LinkedList<E> left = new LinkedList<>();
+        LinkedList<E> right = new LinkedList<>();
+
+        var tNode = origin.getNode(t);
+        var counterNode = origin.head;
+
+        while (counterNode != null) {
+            if (tNode != counterNode) {
+                if (comp.compare(counterNode.getData(), tNode.getData()) > 0) {
+                    right.add(counterNode.getData());
+                } else {
+                    left.add(counterNode.getData());
+                }
+            }
+
+            counterNode = counterNode.getNext();
+        }
+
+        result.addAll(
+                sortingRecursively(left, comp)
+        );
+        result.add(tNode.getData());
+        result.addAll(
+                sortingRecursively(right, comp)
+        );
+
+        return result;
     }
 
     @Override
@@ -153,8 +264,6 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public void add(int index, E value) {
-        //diffucul and ne ponyatno
-
 
     }
 
@@ -189,8 +298,9 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public int indexOf(Object o) {
-        var element = checkAndCastValue(o);
+        var element = (E) o;
 
         if (size == 0) return -1;
 
@@ -209,8 +319,9 @@ public class LinkedList<E> implements List<E> {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public int lastIndexOf(Object o) {
-        var element = checkAndCastValue(o);
+        var element = (E) o;
 
         if (size == 0) return -1;
 
@@ -234,7 +345,9 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public List<E> copy() {
-        return null;
+        LinkedList<E> list = new LinkedList<>();
+        list.addAll(this);
+        return list;
     }
 
     @Override
@@ -381,30 +494,34 @@ public class LinkedList<E> implements List<E> {
 
 
     private Node<E> getNode(int index) {
+        checkIndex(index);
+
         int counter;
+        Node<E> currentNode;
+        UnaryOperator<Integer> counterOp;
+        UnaryOperator<Node<E>> nodeOp;
+
         if (index < size / 2) {
             counter = 0;
-            var currentNode = head;
-            while (currentNode != null) {
-                if (index == counter) {
-                    return currentNode;
-                }
-                currentNode = currentNode.getNext();
-                counter++;
-            }
+            currentNode = head;
+            counterOp = i -> ++i;
+            nodeOp = Node::getNext;
         } else {
             counter = size - 1;
-            var currentNode = tail;
-            while (currentNode != null) {
-                if (index == counter) {
-                    return currentNode;
-                }
-                currentNode = currentNode.getPrevious();
-                counter--;
-            }
+            currentNode = tail;
+            counterOp = i -> --i;
+            nodeOp = Node::getPrevious;
         }
 
-        throw new RuntimeException("Node not found!");
+        while (currentNode != null) {
+            if (index == counter) {
+                return currentNode;
+            }
+            currentNode = nodeOp.accept(currentNode);
+            counter = counterOp.accept(counter);
+        }
+
+        throw new RuntimeException("Bad index!");
     }
 
     @Data

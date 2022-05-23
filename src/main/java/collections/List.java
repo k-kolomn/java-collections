@@ -6,6 +6,7 @@ import function.Function;
 import function.Predicate;
 import function.UnaryOperator;
 
+import java.lang.reflect.Array;
 import java.util.Comparator;
 
 public interface List <E> extends Collection<E> {
@@ -15,6 +16,8 @@ public interface List <E> extends Collection<E> {
     void replaceAll(UnaryOperator<E> operator);
 
     void sort(Comparator<? super E> comparator);
+
+    void sort();
 
     E get(int index);
 
@@ -33,7 +36,6 @@ public interface List <E> extends Collection<E> {
     List<E> copy();
 
     List<E> copyOf(Collection<? extends E> collection);
-
 
     boolean removeFirst(E element);
 
@@ -57,4 +59,8 @@ public interface List <E> extends Collection<E> {
     <P> List<P> transform(Predicate<E> predicate, Function<E, P> transformFunction);
 
     E reduce(BinaryOperator<E> reduceOperator);
+
+    static List emptyList() {
+        return Collections.emptyList();
+    }
 }

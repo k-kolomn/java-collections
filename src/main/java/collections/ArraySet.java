@@ -29,7 +29,7 @@ public class ArraySet<E> implements Set<E>{
     }
 
     @Override
-    public E toArray(E[] array) {
+    public E[] toArray(E[] array) {
         return arrayList.toArray(array);
     }
 

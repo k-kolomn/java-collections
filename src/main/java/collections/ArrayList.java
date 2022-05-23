@@ -28,6 +28,12 @@ public class ArrayList<E> implements List<E> {
     }
 
     @SuppressWarnings("unchecked")
+    public ArrayList(int initCapacity) {
+        data = (E[]) Array.newInstance(Object.class, initCapacity);
+        size = 0;
+    }
+
+    @SuppressWarnings("unchecked")
     public ArrayList(Comparator<? super E> comparator) {
         data = (E[]) Array.newInstance(Object.class, INIT_CAPACITY);
         size = 0;
@@ -55,10 +61,6 @@ public class ArrayList<E> implements List<E> {
         return null;
     }
 
-    private void checkValue(E element) {
-        if (element == null) throw new NullPointerException("Null elements is not allowed!");
-    }
-
     private E checkAndCastValue(Object o) {
         if (o == null) throw new NullPointerException("Null elements is not allowed!");
         return (E) o;
@@ -79,8 +81,14 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public E toArray(E[] array) {
-        return null;
+    @SuppressWarnings("unchecked")
+    public E[] toArray(E[] type) {
+        if (type.length < size) {
+            return (E[]) Arrays.copyOf(data, size, type.getClass());
+        } else {
+            System.arraycopy(data, 0, type, 0, size);
+            return type;
+        }
     }
 
     private void checkIndex(int index) {
@@ -141,6 +149,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean addAll(int index, Collection<? extends E> collection) {
         checkIndex(index);
         if (collection.isEmpty()) return false;
@@ -166,13 +175,37 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public void sort(Comparator<? super E> comparator) {
-        if (comparator == null) throw new RuntimeException("Comparator cannot be null!");
-        if (size == 0) return;
-
         sorting(comparator);
     }
 
+    @Override
+    public void sort() {
+        Comparator<? super E> comp;
+
+        if (comparator != null) {
+            comp = comparator;
+        } else if (size > 0 && data[0] instanceof Comparable<?>) {
+            comp = (a, b) -> ((Comparable<E>) a).compareTo(b);
+        } else {
+            throw new IllegalArgumentException(
+                    "No comparator found and items does not implement Comparable!"
+            );
+        }
+
+        sorting(comp);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void trimDataToSize() {
+        E[] newData = (E[]) Array.newInstance(Object.class, (int) (size * RESIZE_KOEF));
+
+        System.arraycopy(data, 0, newData, 0, size);
+
+        data = newData;
+    }
+
     private void sorting(Comparator<? super E> comparator) {
+        trimDataToSize();
         Arrays.sort(data, comparator);
     }
 
@@ -185,32 +218,33 @@ public class ArrayList<E> implements List<E> {
     @Override
     public E set(int index, E value) {
         checkIndex(index);
-        checkValue(value);
-
         var old = data[index];
-
         data[index] = value;
+
         return old;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void add(int index, E value) {
+        E[] newData = (E[]) Array.newInstance(Object.class, (int)((size + 1) * RESIZE_KOEF));
 
+        System.arraycopy(data, 0, newData, 0, index);
+        newData[index] = value;
+        System.arraycopy(data, index, newData, index + 1, size - index);
+
+        data = newData;
     }
 
     @Override
     public E remove(int index) {
         checkIndex(index);
-        try {
-            var value = data[index];
-            System.arraycopy(data, 0, data, 0, index);
-            System.arraycopy(data, index + 1, data, index, data.length - index - 1);
-            size--;
+        var value = data[index];
+        System.arraycopy(data, 0, data, 0, index);
+        System.arraycopy(data, index + 1, data, index, data.length - index - 1);
+        size--;
 
-            return value;
-        } catch (Exception e) {
-            return null;
-        }
+        return value;
     }
 
     @Override
@@ -238,23 +272,47 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<E> sublist(int start, int end) {
-        return null;
+        if (start == end) {
+            return (List<E>) List.emptyList();
+        }
+        sublistIndexCheck(start, end);
+
+        List<E> list = new ArrayList<>((int) ((start + end) * RESIZE_KOEF));
+        list.addAll(this);
+        return list;
+    }
+
+    private void sublistIndexCheck(int start, int end) {
+        if (start > end) {
+            throw new  IllegalArgumentException("Start index greater than end index!");
+        }
+        if (start < 0) {
+            throw new IndexOutOfBoundsException("Start index lower than zero!");
+        }
+        if (end > size) {
+            throw new IndexOutOfBoundsException("End index greater than size!");
+        }
     }
 
     @Override
     public List<E> copy() {
-        return null;
+        List<E> list = new ArrayList<>((int) (size * RESIZE_KOEF));
+        list.addAll(this);
+        return list;
     }
 
     @Override
     public List<E> copyOf(Collection<? extends E> collection) {
-        return null;
+        List<E> list = new ArrayList<>((int) ((size + collection.size()) * RESIZE_KOEF));
+        list.addAll(this);
+        list.addAll(collection);
+        return list;
     }
 
     @Override
     public boolean removeFirst(E element) {
-        checkValue(element);
         for (int i = 0; i < size; i++) {
             if (data[i].equals(element)) {
                 remove(i);
@@ -266,7 +324,6 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean removeLast(E element) {
-        checkValue(element);
         for (int i = size - 1; i > 0; i--) {
             if (data[i].equals(element)) {
                 remove(i);
