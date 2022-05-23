@@ -160,12 +160,13 @@ public class ArrayListTest {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
-        list.add(3);
-//        boolean changeIf = list.changeIf();
-//        Assertions.assertEquals(, changeIf);
-//        assertThatThrownBy(() -> {
-//
-//        });
+        list.add(1);
+        list.changeIf(
+                i -> i == 1,
+                i -> i + 1
+        );
+        Assertions.assertEquals(2, list.get(0));
+        Assertions.assertEquals(2, list.get(2));
     }
 
     @Test
@@ -174,10 +175,70 @@ public class ArrayListTest {
         list.add(1);
         list.add(2);
         list.add(3);
-//        boolean removeIf = list.removeIf();
-//        Assertions.assertEquals(, removeIf);
-//        assertThatThrownBy(() -> {
-//
-//        });
+
+        list.removeIf(
+                i -> i == 2
+        );
+        Assertions.assertEquals(3, list.get(1));
+        Assertions.assertEquals(2, list.size());
+    }
+
+    @Test
+    public void testRemoveIfPresentElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        list.removeIfPresent(1);
+        Assertions.assertEquals(2, list.get(0));
+        Assertions.assertEquals(2, list.size());
+    }
+
+    @Test
+    public void testForEachElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+//        list.forEach();
+    }
+
+    @Test
+    public void testAddAndProcessElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+
+        list.addAndProcess(2, e -> Assertions.assertEquals(2, e));
+
+        Assertions.assertEquals(2, list.get(1));
+    }
+
+    @Test
+    public void testTransformElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+
+        list.add(1);
+        list.add(2);
+
+        var newList = list.transform(i -> i.doubleValue());
+
+        Assertions.assertEquals(list.size(), newList.size());
+        Assertions.assertInstanceOf(Double.class, newList.get(0));
+        Assertions.assertEquals(2, newList.get(1));
+    }
+
+    @Test
+    public void testReduceElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        var result = list.reduce(Integer::sum);
+        Assertions.assertEquals(10, result);
     }
 }
