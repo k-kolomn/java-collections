@@ -272,10 +272,9 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<E> sublist(int start, int end) {
         if (start == end) {
-            return (List<E>) List.emptyList();
+            return List.emptyList();
         }
         sublistIndexCheck(start, end);
 

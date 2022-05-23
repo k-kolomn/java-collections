@@ -164,7 +164,7 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public void sort(Comparator<? super E> comparator) {
-        sorting(comparator);
+        Collections.sort(this, comparator);
     }
 
     @Override
@@ -181,66 +181,7 @@ public class LinkedList<E> implements List<E> {
             );
         }
 
-        sorting(comp);
-    }
-
-    private void sorting(Comparator<? super E> comp) {
-        var sorted = sortingRecursively((LinkedList<E>) copy(), comp);
-        clear();
-        addAll(sorted);
-    }
-
-    private LinkedList<E> sortingRecursively(LinkedList<E> origin, Comparator<? super E> comp) {
-        if (origin.isEmpty() || origin.size() == 1) return origin;
-        if (origin.size() == 2) {
-            var first = origin.get(0);
-            var second = origin.get(1);
-
-            LinkedList<E> result = new LinkedList<>();
-
-            if (comp.compare(first, second) > 0) {
-                result.add(second);
-                result.add(first);
-            } else {
-                result.add(first);
-                result.add(second);
-            }
-
-            return result;
-
-        }
-
-        LinkedList<E> result = new LinkedList<>();
-
-        int t = origin.size() - 1;
-
-        LinkedList<E> left = new LinkedList<>();
-        LinkedList<E> right = new LinkedList<>();
-
-        var tNode = origin.getNode(t);
-        var counterNode = origin.head;
-
-        while (counterNode != null) {
-            if (tNode != counterNode) {
-                if (comp.compare(counterNode.getData(), tNode.getData()) > 0) {
-                    right.add(counterNode.getData());
-                } else {
-                    left.add(counterNode.getData());
-                }
-            }
-
-            counterNode = counterNode.getNext();
-        }
-
-        result.addAll(
-                sortingRecursively(left, comp)
-        );
-        result.add(tNode.getData());
-        result.addAll(
-                sortingRecursively(right, comp)
-        );
-
-        return result;
+        Collections.sort(this, comp);
     }
 
     @Override

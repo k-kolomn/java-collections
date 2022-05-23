@@ -60,7 +60,7 @@ public interface List <E> extends Collection<E> {
 
     E reduce(BinaryOperator<E> reduceOperator);
 
-    static List emptyList() {
+    static <T> List<T> emptyList() {
         return Collections.emptyList();
     }
 }
