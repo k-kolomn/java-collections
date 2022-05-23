@@ -1,6 +1,10 @@
 import collections.ArrayList;
+import collections.LinkedList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class ArrayListTest {
@@ -33,33 +37,6 @@ public class ArrayListTest {
     }
 
     @Test
-    public void testRemoveElement() {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.remove(0);
-        Assertions.assertEquals(1, list.size());
-    }
-
-    @Test
-    public void testRemoveElementThatDoesNotExist() {
-        ArrayList<Integer> list = new ArrayList<>();
-        assertThatThrownBy(() -> list.remove(1));
-    }
-
-    @Test
-    public void testRemoveFirstElementParamEqNull() {
-        ArrayList<Integer> list = new ArrayList<>();
-        assertThatThrownBy(() -> list.removeFirst(null));
-    }
-
-    @Test
-    public void testRemoveLastElementParamEqNull() {
-        ArrayList<Integer> list = new ArrayList<>();
-        assertThatThrownBy(() -> list.removeLast(null));
-    }
-
-    @Test
     public void testSetElement() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
@@ -74,6 +51,21 @@ public class ArrayListTest {
     }
 
     @Test
+    public void testRemoveElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.remove(0);
+        Assertions.assertEquals(1, list.size());
+    }
+
+    @Test
+    public void testRemoveElementThatDoesNotExist() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.remove(10));
+    }
+
+    @Test
     public void testRemoveFirstElement() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
@@ -82,6 +74,12 @@ public class ArrayListTest {
         list.removeFirst(1);
         Assertions.assertEquals(2, list.size());
         Assertions.assertEquals(2, list.get(0));
+    }
+
+    @Test
+    public void testRemoveFirstElementParamEqNull() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.removeFirst(null));
     }
 
     @Test
@@ -96,6 +94,12 @@ public class ArrayListTest {
     }
 
     @Test
+    public void testRemoveLastElementParamEqNull() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.removeLast(null));
+    }
+
+    @Test
     public void testIndexOfElement() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
@@ -103,10 +107,35 @@ public class ArrayListTest {
         list.add(3);
         int checkIndex = list.indexOf(2);
         Assertions.assertEquals(1, checkIndex);
-        assertThatThrownBy(() -> {
-            list.indexOf(10);
-            list.indexOf(11);
-        });
+    }
+
+    @Test
+    public void testIndexOfElementThatDoesNotExist() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.indexOf(10));
+    }
+
+    @Test
+    public void testContainsElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        boolean contains = list.contains(1);
+        Assertions.assertTrue(contains);
+    }
+
+    @Test
+    public void testContainsElementThatDoesNotExist() {
+        ArrayList<Integer> list = new ArrayList<>();
+        assertThatThrownBy(() -> list.contains(2));
+    }
+
+    @Test
+    public void testClearElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.clear();
+        Assertions.assertEquals(0, list.size());
     }
 
     @Test
@@ -116,31 +145,21 @@ public class ArrayListTest {
         list.add(2);
         boolean isEmpty = list.isEmpty();
         Assertions.assertFalse(isEmpty);
-//        assertThatThrownBy(() -> {
-//            list.isEmpty();
-//            list.isEmpty();
-//        });
     }
 
     @Test
-    public void testContainsElement() {
+    public void testForEachElement() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
-        boolean contains = list.contains(1);
-        Assertions.assertTrue(contains);
-        assertThatThrownBy(() -> {
-            list.contains(2);
-            list.contains(3);
-        });
-    }
+        list.add(2);
+        list.add(3);
 
-    @Test
-    public void testClearElement() {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(1);
-        list.clear();
-        Assertions.assertEquals(0, list.size());
+//        AtomicInteger counter = new AtomicInteger(0);
+//
+//        list.forEach(
+//                e -> counter.incrementAndGet()
+//        );
+//        Assertions.assertEquals(list.size(), counter.get());
     }
 
     @Test
@@ -196,16 +215,6 @@ public class ArrayListTest {
     }
 
     @Test
-    public void testForEachElement() {
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-
-//        list.forEach();
-    }
-
-    @Test
     public void testAddAndProcessElement() {
         ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
@@ -219,12 +228,10 @@ public class ArrayListTest {
     @Test
     public void testTransformElement() {
         ArrayList<Integer> list = new ArrayList<>();
-
         list.add(1);
         list.add(2);
 
         var newList = list.transform(i -> i.doubleValue());
-
         Assertions.assertEquals(list.size(), newList.size());
         Assertions.assertInstanceOf(Double.class, newList.get(0));
         Assertions.assertEquals(2, newList.get(1));
