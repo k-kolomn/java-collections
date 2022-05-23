@@ -32,11 +32,16 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public Object toArray() {
-        return null;
+        Object[] result = new Object[size];
+        int i = 0;
+        for (Node<E> x = head; x != null; x = x.next)
+            result[i++] = x.data;
+        return result;
     }
 
     @Override
     public E toArray(E[] array) {
+
         return null;
     }
 
