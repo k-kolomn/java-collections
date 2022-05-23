@@ -7,6 +7,7 @@ import function.Predicate;
 import function.UnaryOperator;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -52,6 +53,15 @@ public class ArrayList<E> implements List<E> {
     @Override
     public Iterator<E> iterator() {
         return null;
+    }
+
+    private void checkValue(E element) {
+        if (element == null) throw new NullPointerException("Null elements is not allowed!");
+    }
+
+    private E checkAndCastValue(Object o) {
+        if (o == null) throw new NullPointerException("Null elements is not allowed!");
+        return (E) o;
     }
 
     @Override
@@ -156,17 +166,31 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public void sort(Comparator<? super E> comparator) {
+        if (comparator == null) throw new RuntimeException("Comparator cannot be null!");
+        if (size == 0) return;
 
+        sorting(comparator);
+    }
+
+    private void sorting(Comparator<? super E> comparator) {
+        Arrays.sort(data, comparator);
     }
 
     @Override
     public E get(int index) {
-        return null;
+        checkIndex(index);
+        return data[index];
     }
 
     @Override
     public E set(int index, E value) {
-        return null;
+        checkIndex(index);
+        checkValue(value);
+
+        var old = data[index];
+
+        data[index] = value;
+        return old;
     }
 
     @Override
@@ -176,17 +200,41 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public E remove(int index) {
-        return null;
+        checkIndex(index);
+        try {
+            var value = data[index];
+            System.arraycopy(data, 0, data, 0, index);
+            System.arraycopy(data, index + 1, data, index, data.length - index - 1);
+            size--;
+
+            return value;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        var element = checkAndCastValue(o);
+
+        for (int i = 0; i < data.length; i++) {
+            if (data[i].equals(element)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        var element = checkAndCastValue(o);
+
+        for (int i = data.length - 1; i >= 0; i--) {
+            if (data[i].equals(element)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -206,56 +254,114 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean removeFirst(E element) {
+        checkValue(element);
+        for (int i = 0; i < size; i++) {
+            if (data[i].equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public boolean removeLast(E element) {
+        checkValue(element);
+        for (int i = size - 1; i > 0; i--) {
+            if (data[i].equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean changeAll(UnaryOperator<E> operator) {
-        return false;
+        ArrayList<E> list = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            list.add(operator.accept(data[i]));
+        }
+
+        clear();
+        addAll(list);
+
+        return true;
     }
 
     @Override
     public boolean changeIf(Predicate<E> predicate, UnaryOperator<E> operator) {
-        return false;
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(data[i])) {
+                data[i] = operator.accept(data[i]);
+            }
+        }
+        return true;
     }
 
     @Override
     public void forEach(Consumer<E> consumer) {
-
+        for (int i = 0; i < size; i++) {
+            consumer.accept(data[i]);
+        }
     }
 
     @Override
     public boolean removeIfPresent(E elem) {
+        if (contains(elem)) {
+            removeFirst(elem);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean addAndProcess(E elem, Consumer<E> consumer) {
-        return false;
+        add(elem);
+        consumer.accept(elem);
+        return true;
     }
 
     @Override
     public boolean forEachIf(Predicate<E> predicate, Consumer<E> consumer) {
-        return false;
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(data[i])) {
+                consumer.accept(data[i]);
+            }
+
+        }
+        return true;
     }
 
     @Override
     public <P> List<P> transform(Function<E, P> transformFunction) {
-        return null;
+        ArrayList<P> temp = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            temp.add(transformFunction.apply(data[i]));
+        }
+        return temp;
     }
 
     @Override
     public <P> List<P> transform(Predicate<E> predicate, Function<E, P> transformFunction) {
-        return null;
+        ArrayList<P> temp = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(data[i])) {
+                temp.add(transformFunction.apply(data[i]));
+            }
+        }
+        return temp;
     }
 
     @Override
     public E reduce(BinaryOperator<E> reduceOperator) {
-        return null;
+        if (size == 0) return null;
+        E result = data[0];
+        for (int i = 1; i < size; i++) {
+            result = reduceOperator.apply(result, data[i]);
+        }
+        return result;
     }
 }
