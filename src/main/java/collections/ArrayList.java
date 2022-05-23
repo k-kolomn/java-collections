@@ -58,7 +58,22 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<>() {
+
+            private int counter = 0;
+
+            @Override
+            public boolean hasNext() {
+                return counter < size;
+            }
+
+            @Override
+            public E next() {
+                var current = data[counter];
+                counter++;
+                return current;
+            }
+        };
     }
 
     private E checkAndCastValue(Object o) {
@@ -74,20 +89,18 @@ public class ArrayList<E> implements List<E> {
     @Override
     public Object toArray() {
         var array = new Object[size];
-
         System.arraycopy(data, 0, array, 0, size);
-
         return array;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public E[] toArray(E[] type) {
-        if (type.length < size) {
-            return (E[]) Arrays.copyOf(data, size, type.getClass());
+    public E[] toArray(E[] array) {
+        if (array.length < size) {
+            return (E[]) Arrays.copyOf(data, size, array.getClass());
         } else {
-            System.arraycopy(data, 0, type, 0, size);
-            return type;
+            System.arraycopy(data, 0, array, 0, size);
+            return array;
         }
     }
 
@@ -278,8 +291,12 @@ public class ArrayList<E> implements List<E> {
         }
         sublistIndexCheck(start, end);
 
-        List<E> list = new ArrayList<>((int) ((start + end) * RESIZE_KOEF));
-        list.addAll(this);
+        List<E> list = new ArrayList<>((int) ((end - start) * RESIZE_KOEF));
+
+        for (int i = start; i < end; i++) {
+            list.add(data[i]);
+        }
+
         return list;
     }
 

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Random;
 
 public class LinkedList<E> implements List<E> {
 
@@ -40,26 +39,17 @@ public class LinkedList<E> implements List<E> {
 
     public Iterator<E> iterator() {
         return new Iterator<>() {
-            private Node<E> iterator;
-
-            private boolean flag = true;
+            private Node<E> nodeCounter = head;
 
             @Override
             public boolean hasNext() {
-                if (flag && head != null) return true;
-
-                return iterator != null;
+                return nodeCounter != null;
             }
 
             @Override
             public E next() {
-                if (flag) {
-                    flag = false;
-                    iterator = head;
-                }
-
-                E data = iterator.getData();
-                iterator = iterator.getNext();
+                E data = nodeCounter.getData();
+                nodeCounter = nodeCounter.getNext();
                 return data;
             }
         };
