@@ -3,9 +3,7 @@ package collections;
 import function.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
 
 public class LinkedList<E> implements List<E> {
 
@@ -132,9 +130,13 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> collection) {
-        checkIndex(index);
+        for (int i = index; i < collection.size(); i++) {
+            for(E e : collection){
+                add(e);
+            }
+        }
 
-        return false;
+        return true;
     }
 
     @Override
@@ -194,7 +196,17 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void add(int index, E value) {
+        checkIndex(index);
+        var node = getNode(index);
+
+        if (index == size) {
+            linkNodes(tail, (Node<E>) value);
+        } else {
+            linkNodes(node, (Node<E>) value);
+        }
+
 
     }
 
@@ -256,7 +268,7 @@ public class LinkedList<E> implements List<E> {
 
         if (size == 0) return -1;
 
-        int counter = size -1;
+        int counter = size - 1;
         var currentNode = tail;
         while (currentNode != null) {
             if (currentNode.getData().equals(o)) {
@@ -271,7 +283,26 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public List<E> sublist(int start, int end) {
-        return null;
+        sublistIndexCheck(start, end);
+
+        LinkedList<E> list = new LinkedList<>();
+
+        for (int i = start; i < end; i++) {
+                    list.add(get(i));
+        }
+        return list;
+    }
+
+    private void sublistIndexCheck(int start, int end) {
+        if (start > end) {
+            throw new IllegalArgumentException("Start index greater than end index!");
+        }
+        if (start < 0) {
+            throw new IndexOutOfBoundsException("Start index lower than zero!");
+        }
+        if (end > size) {
+            throw new IndexOutOfBoundsException("End index greater than size!");
+        }
     }
 
     @Override
