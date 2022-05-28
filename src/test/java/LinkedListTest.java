@@ -4,6 +4,8 @@ import collections.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.net.Inet4Address;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -266,4 +268,70 @@ public class LinkedListTest {
         result = list.reduce((a, b) -> (byte) (a + b));
         Assertions.assertEquals(Byte.MIN_VALUE, result);
     }
+
+    @Test
+    public void testSublist() {
+        LinkedList<Integer> numbers = new LinkedList<>();
+
+        numbers.add(1);
+        numbers.add(2);
+        numbers.add(3);
+        numbers.add(4);
+        numbers.add(5);
+        numbers.sublist(1, 3);
+        //###
+
+        assertEquals(3, numbers.size());
+
+
+    }
+
+
+    @Test
+    public void testAddAll() {
+        LinkedList<Integer> list = new LinkedList<>();
+
+        list.add(1);
+        list.add(2);
+
+        LinkedList<Integer> list2 = new LinkedList<>();
+
+        list2.add(3);
+        list2.add(4);
+        list.addAll(list2);
+
+        assertEquals(4, list.size());
+        assertEquals(3, list.get(2));
+    }
+
+    @Test
+    public void testAddAllByIndex() {
+        LinkedList<Integer> list = new LinkedList<>();
+
+        list.add(1);
+        list.add(2);
+
+        LinkedList<Integer> list2 = new LinkedList<>();
+
+        list2.add(3);
+        list2.add(4);
+        list.addAll(1, list2);
+
+        assertEquals(3, list.size());
+        assertEquals(3, list.get(1));
+    }
+
+    @Test
+    public void testCopy(){
+
+        LinkedList<Integer> list = new LinkedList<>();
+
+        list.add(3);
+        list.add(4);
+        list.copy();
+
+        assertEquals(2, list.size());
+
+    }
+
 }

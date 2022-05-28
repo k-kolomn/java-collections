@@ -3,10 +3,10 @@ package collections;
 import function.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.*;
 
 public class LinkedList<E> implements List<E> {
-
 
     private Node<E> head;
     private Node<E> tail;
@@ -130,11 +130,11 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> collection) {
-        for (int i = index; i < collection.size(); i++) {
-            for(E e : collection){
-                add(e);
+            for (E e : collection) {
+             add(index, e);
+             index++;
             }
-        }
+
 
         return true;
     }
@@ -288,7 +288,7 @@ public class LinkedList<E> implements List<E> {
         LinkedList<E> list = new LinkedList<>();
 
         for (int i = start; i < end; i++) {
-                    list.add(get(i));
+            list.add(get(i));
         }
         return list;
     }
