@@ -1,11 +1,14 @@
 package collections;
 
-import function.*;
-
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 public class ArrayList<E> implements List<E> {
 
@@ -156,14 +159,6 @@ public class ArrayList<E> implements List<E> {
         return true;
     }
 
-//    @Override
-//    public boolean retainAll(Collection<?> collection) {
-//
-//
-//
-//        return false;
-//    }
-
     @Override
     public void clear() {
         data = (E[]) Array.newInstance(Object.class, INIT_CAPACITY);
@@ -186,13 +181,6 @@ public class ArrayList<E> implements List<E> {
         data = newData;
 
         return true;
-    }
-
-    @Override
-    public void replaceAll(UnaryOperator<E> operator) {
-        for (int i = 0; i < size; i++) {
-            data[i] = operator.accept(data[i]);
-        }
     }
 
     @Override
@@ -249,13 +237,18 @@ public class ArrayList<E> implements List<E> {
     @Override
     @SuppressWarnings("unchecked")
     public void add(int index, E value) {
-        E[] newData = (E[]) Array.newInstance(Object.class, (int)((size + 1) * RESIZE_KOEF));
+        if (size == index) {
+            add(value);
+        } else {
+            E[] newData = (E[]) Array.newInstance(Object.class, (int) ((size + 1) * RESIZE_KOEF));
 
-        System.arraycopy(data, 0, newData, 0, index);
-        newData[index] = value;
-        System.arraycopy(data, index, newData, index + 1, size - index);
+            System.arraycopy(data, 0, newData, 0, index);
+            newData[index] = value;
+            System.arraycopy(data, index, newData, index + 1, size - index);
 
-        data = newData;
+            data = newData;
+            size++;
+        }
     }
 
     @Override
@@ -295,10 +288,11 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public List<E> sublist(int start, int end) {
+        sublistIndexCheck(start, end);
+
         if (start == end) {
             return List.emptyList();
         }
-        sublistIndexCheck(start, end);
 
         List<E> list = new ArrayList<>((int) ((end - start) * RESIZE_KOEF));
 
@@ -361,14 +355,9 @@ public class ArrayList<E> implements List<E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean changeAll(UnaryOperator<E> operator) {
-        ArrayList<E> list = new ArrayList<>();
-
         for (int i = 0; i < size; i++) {
-            list.add(operator.accept(data[i]));
+            data[i] = operator.apply(data[i]);
         }
-
-        clear();
-        addAll(list);
 
         return true;
     }
@@ -377,17 +366,10 @@ public class ArrayList<E> implements List<E> {
     public boolean changeIf(Predicate<E> predicate, UnaryOperator<E> operator) {
         for (int i = 0; i < size; i++) {
             if (predicate.test(data[i])) {
-                data[i] = operator.accept(data[i]);
+                data[i] = operator.apply(data[i]);
             }
         }
         return true;
-    }
-
-    @Override
-    public void forEach(Consumer<E> consumer) {
-        for (int i = 0; i < size; i++) {
-            consumer.accept(data[i]);
-        }
     }
 
     @Override

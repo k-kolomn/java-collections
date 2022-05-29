@@ -6,13 +6,21 @@ public class Collections {
 
     private static final List<?> EMPTY_LIST;
 
+    private static final Set<?> EMPTY_SET;
+
     static {
         EMPTY_LIST = new ArrayList<>(0);
+        EMPTY_SET = new ArraySet<>();
     }
 
     @SuppressWarnings("unchecked")
     public static <T> List<T> emptyList() {
-        return (List<T>) EMPTY_LIST;
+        return ((List<T>) EMPTY_LIST).copy();
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> Set<T> emptySet() {
+        return ((Set<T>) EMPTY_SET).copy();
     }
 
     public static <E> void sort(List<E> list, Comparator<? super E> comparator) {

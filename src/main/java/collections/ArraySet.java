@@ -1,8 +1,7 @@
 package collections;
 
-import function.Predicate;
-
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 public class ArraySet<E> implements Set<E>{
 

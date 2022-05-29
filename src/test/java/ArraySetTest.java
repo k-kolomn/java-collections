@@ -101,7 +101,7 @@ public class ArraySetTest {
     @Test
     public void testContainsElementThatDoesNotExist() {
         ArraySet<Integer> set = new ArraySet<>();
-        assertThatThrownBy(() -> set.contains(2));
+        Assertions.assertFalse(set.contains(12));
     }
 
     @Test

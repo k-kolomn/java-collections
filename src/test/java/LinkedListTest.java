@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -15,12 +16,6 @@ public class LinkedListTest {
         Assertions.assertEquals(2, list.size());
         Assertions.assertTrue(list.contains(1));
         Assertions.assertTrue(list.contains(2));
-    }
-
-    @Test
-    public void testAddNullElement() {
-        LinkedList<Integer> list = new LinkedList<>();
-        assertThatThrownBy(() -> list.add(null));
     }
 
     @Test
@@ -43,6 +38,9 @@ public class LinkedListTest {
         list.add(1);
         list.set(0, 2);
         Assertions.assertEquals(2, list.get(0));
+        Assertions.assertEquals(1, list.size());
+        Assertions.assertFalse(list.contains(1));
+        Assertions.assertTrue(list.contains(2));
     }
 
     @Test
@@ -78,12 +76,6 @@ public class LinkedListTest {
     }
 
     @Test
-    public void testRemoveFirstElementParamEqNull() {
-        LinkedList<Integer> list = new LinkedList<>();
-        assertThatThrownBy(() -> list.removeFirst(null));
-    }
-
-    @Test
     public void testRemoveLastElement() {
         LinkedList<Integer> list = new LinkedList<>();
         list.add(1);
@@ -92,12 +84,6 @@ public class LinkedListTest {
         list.removeLast(1);
         Assertions.assertEquals(2, list.size());
         Assertions.assertEquals(1, list.get(0));
-    }
-
-    @Test
-    public void testRemoveLastElementParamEqNull() {
-        LinkedList<Integer> list = new LinkedList<>();
-        assertThatThrownBy(() -> list.removeLast(null));
     }
 
     @Test
@@ -111,23 +97,11 @@ public class LinkedListTest {
     }
 
     @Test
-    public void testIndexOfElementThatDoesNotExist() {
-        LinkedList<Integer> list = new LinkedList<>();
-        assertThatThrownBy(() -> list.indexOf(10));
-    }
-
-    @Test
     public void testContainsElement() {
         LinkedList<Integer> list = new LinkedList<>();
         list.add(1);
         boolean contains = list.contains(1);
         Assertions.assertTrue(contains);
-    }
-
-    @Test
-    public void testContainsElementThatDoesNotExist() {
-        LinkedList<Integer> list = new LinkedList<>();
-        assertThatThrownBy(() -> list.contains(2));
     }
 
     @Test
@@ -146,12 +120,12 @@ public class LinkedListTest {
         list.add(2);
         list.add(3);
 
-//        AtomicInteger counter = new AtomicInteger(0);
-//
-//        list.forEach(
-//                e -> counter.incrementAndGet()
-//        );
-//        Assertions.assertEquals(list.size(), counter.get());
+        AtomicInteger counter = new AtomicInteger(0);
+
+        list.forEach(
+                e -> counter.incrementAndGet()
+        );
+        Assertions.assertEquals(list.size(), counter.get());
     }
 
     @Test
@@ -190,8 +164,8 @@ public class LinkedListTest {
         list.removeIf(
                 i -> i == 2
         );
-        Assertions.assertEquals(2, list.get(1));
-        Assertions.assertEquals(3, list.size());
+        Assertions.assertFalse(list.contains(2));
+        Assertions.assertEquals(2, list.size());
     }
 
     @Test
@@ -234,7 +208,7 @@ public class LinkedListTest {
         list.add(1);
         list.add(2);
 
-        var newList = list.transform(i -> i.doubleValue());
+        var newList = list.transform(Integer::doubleValue);
         Assertions.assertEquals(list.size(), newList.size());
         Assertions.assertInstanceOf(Double.class, newList.get(0));
         Assertions.assertEquals(2, newList.get(1));
@@ -312,8 +286,11 @@ public class LinkedListTest {
         list2.add(4);
         list.addAll(1, list2);
 
-        Assertions.assertEquals(3, list.size());
+        Assertions.assertEquals(4, list.size());
+        Assertions.assertEquals(1, list.get(0));
         Assertions.assertEquals(3, list.get(1));
+        Assertions.assertEquals(4, list.get(2));
+        Assertions.assertEquals(2, list.get(3));
     }
 
     @Test

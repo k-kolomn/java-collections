@@ -1,19 +1,15 @@
 package collections;
 
-import function.BinaryOperator;
-import function.Consumer;
-import function.Function;
-import function.Predicate;
-import function.UnaryOperator;
-
-import java.lang.reflect.Array;
 import java.util.Comparator;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 public interface List <E> extends Collection<E> {
 
     boolean addAll(int index, Collection<? extends E> collection);
-
-    void replaceAll(UnaryOperator<E> operator);
 
     void sort(Comparator<? super E> comparator);
 
@@ -46,8 +42,6 @@ public interface List <E> extends Collection<E> {
 
     boolean changeIf(Predicate<E> predicate, UnaryOperator<E> operator);
 
-    void forEach(Consumer<E> consumer);
-
     boolean removeIfPresent(E elem);
 
     boolean addAndProcess(E elem, Consumer<E> consumer);
@@ -62,5 +56,15 @@ public interface List <E> extends Collection<E> {
 
     static <T> List<T> emptyList() {
         return Collections.emptyList();
+    }
+
+    static <T> List<T> of(T ... elems) {
+        List<T> list = emptyList();
+
+        for (T elem : elems) {
+            list.add(elem);
+        }
+
+        return list;
     }
 }

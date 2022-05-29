@@ -1,8 +1,7 @@
 package collections;
 
-import function.Predicate;
-
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 public interface Collection <E> extends Iterable<E> {
 

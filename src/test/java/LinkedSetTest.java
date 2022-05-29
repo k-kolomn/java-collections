@@ -1,17 +1,10 @@
-import collections.ArrayList;
-import collections.LinkedList;
 import collections.LinkedSet;
-import collections.List;
-import org.assertj.core.internal.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.net.Inet4Address;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LinkedSetTest {
 

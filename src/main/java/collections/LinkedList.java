@@ -1,16 +1,16 @@
 package collections;
 
-import function.BinaryOperator;
-import function.Consumer;
-import function.Function;
-import function.Predicate;
-import function.UnaryOperator;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 public class LinkedList<E> implements List<E> {
 
@@ -176,11 +176,10 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> collection) {
-            for (E e : collection) {
-             add(index, e);
-             index++;
-            }
-
+        for (E e : collection) {
+            add(index, e);
+            index++;
+        }
 
         return true;
     }
@@ -191,13 +190,6 @@ public class LinkedList<E> implements List<E> {
             add(e);
         }
         return true;
-    }
-
-    @Override
-    public void replaceAll(UnaryOperator<E> operator) {
-        for (int i = 0; i < size; i++) {
-            operator.accept(get(i));
-        }
     }
 
     @Override
@@ -243,18 +235,25 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public void add(int index, E value) {
-        checkIndex(index);
+        if (index > size || index < 0) throw new IndexOutOfBoundsException("index " + index + " is out of bounds");
 
         Node<E> node = new Node<>(value);
 
         if (index == size) {
-            linkNodes(tail, node);
-            tail = node;
+            add(value);
         } else {
-            var prevNode = getNode(index);
-            linkNodes(prevNode, node);
+            if (index == 0) {
+                node.setNext(head);
+                head.setPrevious(node);
+                head = node;
+            } else {
+                Node<E> oldNode = getNode(index);
+                linkNodes(oldNode.getPrevious(), node);
+                linkNodes(node, oldNode);
+            }
+
+            size++;
         }
-        size++;
     }
 
     private void checkIndex(int index) {
@@ -413,12 +412,11 @@ public class LinkedList<E> implements List<E> {
         for (int i = 0; i < size; i++) {
             var currentNode = getNode(i);
             currentNode.setData(
-                    operator.accept(
+                    operator.apply(
                             currentNode.getData()
                     )
             );
         }
-        size++;
         return true;
     }
 
@@ -428,7 +426,7 @@ public class LinkedList<E> implements List<E> {
             var currentNode = getNode(i);
             if (predicate.test(currentNode.getData())) {
                 currentNode.setData(
-                        operator.accept(
+                        operator.apply(
                                 currentNode.getData()
                         )
                 );
@@ -436,13 +434,6 @@ public class LinkedList<E> implements List<E> {
         }
         size++;
         return true;
-    }
-
-    @Override
-    public void forEach(Consumer<E> consumer) {
-        for (int i = 0; i < size; i++) {
-            consumer.accept(get(i));
-        }
     }
 
     @Override
@@ -514,6 +505,10 @@ public class LinkedList<E> implements List<E> {
         UnaryOperator<Integer> counterOp;
         UnaryOperator<Node<E>> nodeOp;
 
+        if (size == 1 && index == 0) {
+            return head;
+        }
+
         if (index < size / 2) {
             counter = 0;
             currentNode = head;
@@ -530,8 +525,8 @@ public class LinkedList<E> implements List<E> {
             if (index == counter) {
                 return currentNode;
             }
-            currentNode = nodeOp.accept(currentNode);
-            counter = counterOp.accept(counter);
+            currentNode = nodeOp.apply(currentNode);
+            counter = counterOp.apply(counter);
         }
 
         throw new RuntimeException("Bad index!");
