@@ -35,8 +35,14 @@ public class LinkedSet<E> implements Set<E>{
 
     @Override
     public boolean add(E elem) {
+        for (int i =0; i < linkedList.size(); i++){
+            if(contains(elem)){
+                return false;
+            }
+        }
         return linkedList.add(elem);
     }
+
 
     @Override
     public boolean remove(Object o) {
