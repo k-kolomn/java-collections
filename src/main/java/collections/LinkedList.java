@@ -62,14 +62,14 @@ public class LinkedList<E> implements List<E> {
             @Override
             public void remove() {
                 if (previous != null) {
-                    if (previous == head) {
+                    if (size == 1) {
+                        clear();
+                    } else if (previous == head) {
                         head = head.getNext();
                         head.setPrevious(null);
                     } else if (previous == tail) {
                         tail = tail.getPrevious();
                         tail.setNext(null);
-                    } else if (size == 1) {
-                        clear();
                     } else {
                         var first = previous.getPrevious();
                         var second = nodeCounter;
@@ -166,18 +166,6 @@ public class LinkedList<E> implements List<E> {
         return false;
     }
 
-    @Override
-    public boolean retainAll(Collection<?> collection) {
-        Iterator<E> iterator = iterator();
-
-        while (iterator.hasNext()) {
-            if (!collection.contains(iterator.next())) {
-                iterator.remove();
-            }
-        }
-
-        return true;
-    }
 
     @Override
     public void clear() {

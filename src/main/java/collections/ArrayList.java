@@ -74,17 +74,8 @@ public class ArrayList<E> implements List<E> {
             @Override
             public void remove() {
                 if (previous != -1) {
-                    if (size == 1) {
-                        clear();
-                    } else if (previous == 0) {
-                        System.arraycopy(data, 1, data, 0, size - 1);
-                    } else if (previous == size - 1) {
-                        System.arraycopy(data, 0, data, 0, size - 2);
-                    } else {
-                        ArrayList.this.remove(previous);
-                    }
-
-                    size--;
+                    counter = previous;
+                    ArrayList.this.remove(counter);
                     previous = -1;
                 }
             }
@@ -165,10 +156,13 @@ public class ArrayList<E> implements List<E> {
         return true;
     }
 
-    @Override
-    public boolean retainAll(Collection<?> collection) {
-        return false;
-    }
+//    @Override
+//    public boolean retainAll(Collection<?> collection) {
+//
+//
+//
+//        return false;
+//    }
 
     @Override
     public void clear() {
@@ -279,7 +273,7 @@ public class ArrayList<E> implements List<E> {
     public int indexOf(Object o) {
         var element = checkAndCastValue(o);
 
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < size; i++) {
             if (data[i].equals(element)) {
                 return i;
             }

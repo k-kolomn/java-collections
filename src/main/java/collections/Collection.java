@@ -56,7 +56,17 @@ public interface Collection <E> extends Iterable<E> {
 
     boolean removeIf(Predicate<? super E> predicate);
 
-    boolean retainAll(Collection<?> collection);
+    default boolean retainAll(Collection<?> collection) {
+        Iterator<E> iterator = iterator();
+
+        while (iterator.hasNext()) {
+            if (!collection.contains(iterator.next())) {
+                iterator.remove();
+            }
+        }
+
+        return true;
+    }
 
     void clear();
 }
