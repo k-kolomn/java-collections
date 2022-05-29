@@ -17,10 +17,61 @@ public class ArrayListTest {
     }
 
     @Test
+    public void testAddByIndexElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(0,1);
+        list.add(1,2);
+        Assertions.assertEquals(2,list.size());
+    }
+
+    @Test
     public void testAddNullElement() {
         ArrayList<Integer> list = new ArrayList<>();
         assertThatThrownBy(() -> list.add(null));
     }
+
+    @Test
+    public void testIteratorElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.iterator();
+        Assertions.assertEquals(2, list.size());
+    }
+
+    @Test
+    public void testToArrayElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.toArray();
+        Assertions.assertEquals(2, list.size());
+    }
+
+    @Test
+    public void testCopyElement() {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.copy();
+        Assertions.assertEquals(2, list.size());
+    }
+
+//    @Test
+//    public void testCopyOfElement() {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        list.add(1);
+//        list.add(2);
+//        list.copyOf();
+//    }
+
+//    @Test
+//    public void testRetainAllElement() {
+//        ArrayList<Integer> list = new ArrayList<>();
+//        list.add(1);
+//        list.add(2);
+//        list.retainAll();
+//    }
 
     @Test
     public void testGetElement() {
