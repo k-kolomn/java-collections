@@ -1,10 +1,6 @@
 package collections;
 
-import function.BinaryOperator;
-import function.Consumer;
-import function.Function;
-import function.Predicate;
-import function.UnaryOperator;
+import function.*;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;

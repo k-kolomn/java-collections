@@ -1,14 +1,8 @@
-import collections.ArrayList;
 import collections.LinkedList;
-import collections.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.net.Inet4Address;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -19,6 +13,8 @@ public class LinkedListTest {
         list.add(1);
         list.add(2);
         Assertions.assertEquals(2, list.size());
+        Assertions.assertTrue(list.contains(1));
+        Assertions.assertTrue(list.contains(2));
     }
 
     @Test
@@ -278,12 +274,11 @@ public class LinkedListTest {
         numbers.add(3);
         numbers.add(4);
         numbers.add(5);
-        numbers.sublist(1, 3);
-        //###
+        var sublist = numbers.sublist(1, 3);
 
-        assertEquals(3, numbers.size());
-
-
+        Assertions.assertEquals(2, sublist.size());
+        Assertions.assertTrue(sublist.contains(2));
+        Assertions.assertTrue(sublist.contains(3));
     }
 
 
@@ -300,8 +295,8 @@ public class LinkedListTest {
         list2.add(4);
         list.addAll(list2);
 
-        assertEquals(4, list.size());
-        assertEquals(3, list.get(2));
+        Assertions.assertEquals(4, list.size());
+        Assertions.assertEquals(3, list.get(2));
     }
 
     @Test
@@ -317,8 +312,8 @@ public class LinkedListTest {
         list2.add(4);
         list.addAll(1, list2);
 
-        assertEquals(3, list.size());
-        assertEquals(3, list.get(1));
+        Assertions.assertEquals(3, list.size());
+        Assertions.assertEquals(3, list.get(1));
     }
 
     @Test
@@ -330,8 +325,7 @@ public class LinkedListTest {
         list.add(4);
         list.copy();
 
-        assertEquals(2, list.size());
-
+        Assertions.assertEquals(2, list.size());
     }
 
 }

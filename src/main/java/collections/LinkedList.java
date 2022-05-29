@@ -1,10 +1,15 @@
 package collections;
 
-import function.*;
+import function.BinaryOperator;
+import function.Consumer;
+import function.Function;
+import function.Predicate;
+import function.UnaryOperator;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Iterator;
 
 public class LinkedList<E> implements List<E> {
 
@@ -199,15 +204,17 @@ public class LinkedList<E> implements List<E> {
     @SuppressWarnings("unchecked")
     public void add(int index, E value) {
         checkIndex(index);
-        var node = getNode(index);
+
+        Node<E> node = new Node<>(value);
 
         if (index == size) {
-            linkNodes(tail, (Node<E>) value);
+            linkNodes(tail, node);
+            tail = node;
         } else {
-            linkNodes(node, (Node<E>) value);
+            var prevNode = getNode(index);
+            linkNodes(prevNode, node);
         }
-
-
+        size++;
     }
 
     private void checkIndex(int index) {
