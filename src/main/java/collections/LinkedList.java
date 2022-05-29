@@ -8,6 +8,7 @@ import function.UnaryOperator;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -43,6 +44,7 @@ public class LinkedList<E> implements List<E> {
     public Iterator<E> iterator() {
         return new Iterator<>() {
             private Node<E> nodeCounter = head;
+            private Node<E> previous = null;
 
             @Override
             public boolean hasNext() {
@@ -52,8 +54,40 @@ public class LinkedList<E> implements List<E> {
             @Override
             public E next() {
                 E data = nodeCounter.getData();
+                previous = nodeCounter;
                 nodeCounter = nodeCounter.getNext();
                 return data;
+            }
+
+            @Override
+            public void remove() {
+                if (previous != null) {
+                    if (previous == head) {
+                        head = head.getNext();
+                        head.setPrevious(null);
+                    } else if (previous == tail) {
+                        tail = tail.getPrevious();
+                        tail.setNext(null);
+                    } else if (size == 1) {
+                        clear();
+                    } else {
+                        var first = previous.getPrevious();
+                        var second = nodeCounter;
+
+                        if (first == null) {
+                            head = second;
+                            head.setPrevious(null);
+                        } else if (second == null) {
+                            tail = first;
+                            tail.setNext(null);
+                        } else {
+                            linkNodes(first, second);
+                        }
+                    }
+
+                    previous = null;
+                    size--;
+                }
             }
         };
     }
@@ -67,16 +101,27 @@ public class LinkedList<E> implements List<E> {
     public Object toArray() {
         Object[] result = new Object[size];
         int i = 0;
-        for (Node<E> x = head; x != null; x = x.next) {
+        for (var x = head; x != null; x = x.next) {
             result[i++] = x.data;
         }
+
         return result;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public E[] toArray(E[] array) {
+        if (array.length < size) {
+            E[] result = (E[]) Array.newInstance(array.getClass().componentType(), size);
+            for (int i = 0; i < size; i++) {
+                result[i] = get(i);
+            }
 
-        return null;
+            return result;
+        } else {
+            System.arraycopy(toArray(), 0, array, 0, size);
+            return array;
+        }
     }
 
     @Override
@@ -123,7 +168,15 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        return false;
+        Iterator<E> iterator = iterator();
+
+        while (iterator.hasNext()) {
+            if (!collection.contains(iterator.next())) {
+                iterator.remove();
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -201,7 +254,6 @@ public class LinkedList<E> implements List<E> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void add(int index, E value) {
         checkIndex(index);
 
@@ -321,7 +373,11 @@ public class LinkedList<E> implements List<E> {
 
     @Override
     public List<E> copyOf(Collection<? extends E> collection) {
-        return null;
+        LinkedList<E> list = new LinkedList<>();
+        list.addAll(this);
+        list.addAll(collection);
+
+        return list;
     }
 
     @Override

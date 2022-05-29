@@ -57,6 +57,7 @@ public class ArrayList<E> implements List<E> {
         return new Iterator<>() {
 
             private int counter = 0;
+            private int previous = -1;
 
             @Override
             public boolean hasNext() {
@@ -66,8 +67,26 @@ public class ArrayList<E> implements List<E> {
             @Override
             public E next() {
                 var current = data[counter];
-                counter++;
+                previous = counter++;
                 return current;
+            }
+
+            @Override
+            public void remove() {
+                if (previous != -1) {
+                    if (size == 1) {
+                        clear();
+                    } else if (previous == 0) {
+                        System.arraycopy(data, 1, data, 0, size - 1);
+                    } else if (previous == size - 1) {
+                        System.arraycopy(data, 0, data, 0, size - 2);
+                    } else {
+                        ArrayList.this.remove(previous);
+                    }
+
+                    size--;
+                    previous = -1;
+                }
             }
         };
     }

@@ -299,4 +299,25 @@ public class ArrayListTest {
         var result = list.reduce(Integer::sum);
         Assertions.assertEquals(10, result);
     }
+
+    @Test
+    public void testRetainAll() {
+        ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<Integer> retainList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            list.add(i);
+
+            if (i % 3 == 0) {
+                retainList.add(i);
+            }
+        }
+
+        list.retainAll(retainList);
+
+        Assertions.assertTrue(list.contains(0));
+        Assertions.assertTrue(list.contains(3));
+        Assertions.assertTrue(list.contains(6));
+        Assertions.assertTrue(list.contains(9));
+    }
+
 }

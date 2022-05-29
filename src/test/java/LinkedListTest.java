@@ -328,4 +328,24 @@ public class LinkedListTest {
         Assertions.assertEquals(2, list.size());
     }
 
+    @Test
+    public void testRetainAll() {
+        LinkedList<Integer> list = new LinkedList<>();
+        LinkedList<Integer> retainList = new LinkedList<>();
+        for (int i = 0; i < 10; i++) {
+            list.add(i);
+
+            if (i % 3 == 0) {
+                retainList.add(i);
+            }
+        }
+
+        list.retainAll(retainList);
+
+        Assertions.assertTrue(list.contains(0));
+        Assertions.assertTrue(list.contains(3));
+        Assertions.assertTrue(list.contains(6));
+        Assertions.assertTrue(list.contains(9));
+    }
+
 }
