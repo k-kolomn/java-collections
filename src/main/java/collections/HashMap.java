@@ -7,7 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class HashMap<K, V> implements Map <K, V> {
+public class HashMap<K, V> implements Map<K, V> {
 
     private static final int INIT_CAPACITY = 4;
     private static final double RESIZE_K = 1.5;
@@ -40,6 +40,11 @@ public class HashMap<K, V> implements Map <K, V> {
     }
 
     /*
+           [[k1], [k2, k5, k6], [k3], [k4]]
+           get(k2)
+
+
+
            [key1, key2, key3, key4]
 
            [[key3], [key1, key2, key5, key], [key, key, key], [key4]]
@@ -63,6 +68,18 @@ public class HashMap<K, V> implements Map <K, V> {
            key2 -> 1
            1 % 4 = 1
 
+           1 % 2 -> 1
+           2 % 2 -> 0
+           3 % 2 -> 1
+           4 % 2 -> 0
+
+           2 * 2 = 4
+
+           1 % 4 -> 1
+           2 % 4 -> 2
+           3 % 4 -> 3
+           4 % 5 -> 0
+
      */
 
     private int getIndex(int size, K key) {
@@ -71,12 +88,12 @@ public class HashMap<K, V> implements Map <K, V> {
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 
     @Override
@@ -99,7 +116,7 @@ public class HashMap<K, V> implements Map <K, V> {
         var index = getIndex(data.length, k);
         var list = data[index];
 
-        if (list.isEmpty()) return null;
+        if (list.isEmpty() || !list.contains(key)) return null;
 
         for (Node<K, V> node : list) {
             if (node.getKey().equals(k)) {
@@ -107,7 +124,7 @@ public class HashMap<K, V> implements Map <K, V> {
             }
         }
 
-        return null;
+        throw new RuntimeException("Error occurred!");
     }
 
     @Override
@@ -120,8 +137,10 @@ public class HashMap<K, V> implements Map <K, V> {
 
         size++;
 
-        if (list.size() == 0) {
-            list.add(new Node<>(key, value));
+        Node<K, V> kvNode = new Node<>(key, value);
+
+        if (list.size() == 0 || !list.contains(kvNode)) {
+            list.add(kvNode);
             return null;
         }
 
@@ -133,8 +152,7 @@ public class HashMap<K, V> implements Map <K, V> {
             }
         }
 
-        list.add(new Node<>(key, value));
-        return null;
+        throw new RuntimeException("Error occurred!");
     }
 
     private void checkLoadFactor() {
@@ -172,6 +190,9 @@ public class HashMap<K, V> implements Map <K, V> {
 
     @Override
     public V remove(Object key) {
+
+
+
         return null;
     }
 
@@ -275,6 +296,27 @@ public class HashMap<K, V> implements Map <K, V> {
             var tmp = this.value;
             this.value = value;
             return tmp;
+        }
+
+        public int hashCode() {
+            return key.hashCode() + value.hashCode() / 2;
+        }
+
+        // v1 != v2
+        // hash(v1) != hash(v2)
+
+        @SuppressWarnings("unchecked")
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Node)) return false;
+            Node<K, V> other = (Node<K, V>) o;
+
+            if (this.hashCode() != other.hashCode()) return false;
+
+            boolean keysEq = this.key.equals(other.key);
+            boolean valuesEq = this.value.equals(other.value);
+
+            return keysEq && valuesEq;
         }
     }
 }
