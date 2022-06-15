@@ -11,6 +11,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     private static final int INIT_CAPACITY = 4;
     private static final double RESIZE_K = 1.5;
+
     private double loadFactorK;
 
     private LinkedList<Node<K, V>>[] data;
@@ -53,7 +54,6 @@ public class HashMap<K, V> implements Map<K, V> {
            [[key, key], [key, key], [key, key], [key, key, key]]
 
            [[key, key], [key], [key], [key, key], [key, key], [key]]
-
 
            1 + 2 + 0 + 1 = 4 > size * loadFactorK
 
@@ -98,11 +98,19 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean containsKey(Object key) {
-        return false;
+        return get(key) != null;
     }
 
     @Override
     public boolean containsValue(Object value) {
+        for (LinkedList<Node<K, V>> list : data) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getValue().equals(value)) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
@@ -189,9 +197,21 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V remove(Object key) {
 
+        int index = getIndex(data.length, (K) key);
+        var list = data[index];
 
+        if (list.size() == 0) return null;
+        for (Node<K, V> node : list) {
+            if (node.getKey().equals(key)) {
+                var old = node.getValue();
+                list.remove(node);
+                size--;
+                return old;
+            }
+        }
 
         return null;
     }
@@ -203,42 +223,68 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public void clear() {
-
+        for (LinkedList<Node<K, V>> list : data) {
+            list.clear();
+        }
+        size = 0;
     }
 
     @Override
     public Set<K> keySet() {
-        return null;
+        Set<K> result = new ArraySet<>();
+        for (LinkedList<Node<K, V>> list : data) {
+            for (int i = 0; i < list.size(); i++) {
+                result.add(list.get(i).getKey());
+            }
+        }
+        return result;
     }
 
     @Override
     public Collection<V> values() {
-        return null;
+        LinkedList<V> result = new LinkedList<>();
+        for (LinkedList<Node<K, V>> list : data) {
+            for (int i = 0; i < list.size(); i++) {
+                result.add(list.get(i).getValue());
+            }
+        }
+        return result;
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        Set<Entry<K, V>> result = new ArraySet<>();
+        for (LinkedList<Node<K, V>> list : data) {
+            for (Node<K, V> node : list) {
+                result.add(node);
+            }
+        }
+        return result;
     }
 
     @Override
     public V getOrDefault(Object key, V defaultValue) {
-        return null;
+        var get = get(key);
+        return get == null ? defaultValue : get;
     }
 
     @Override
     public void forEach(BiConsumer<? super K, ? super V> action) {
-
+        for (Entry<K, V> entry : entrySet()) {
+            action.accept(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override
     public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
-
+        for (Entry<K, V> entry : entrySet()) {
+            var newValue = function.apply(entry.getKey(), entry.getValue());
+            put(entry.getKey(), newValue);
+        }
     }
-
     @Override
     public V putIfAbsent(K key, V value) {
-        return null;
+        return containsKey(key) ? get(key): put(key, value);
     }
 
     @Override
@@ -275,6 +321,7 @@ public class HashMap<K, V> implements Map<K, V> {
     public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
         return null;
     }
+
 
     @AllArgsConstructor
     private static class Node<K, V> implements Map.Entry<K, V> {
