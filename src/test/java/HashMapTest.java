@@ -28,7 +28,7 @@ public class HashMapTest {
         map.put(2,"Hollo");
         map.put(8,"Hollo");
 
-      assertEquals(map.get(1), "Hollo");
+        assertEquals("Hollo", map.get(1));
     }
 
     @Test
@@ -38,8 +38,10 @@ public class HashMapTest {
         map.put(1,"Hollo");
         map.put(2,"Hollo");
         map.put(8,"Hollo");
+        var s = map.remove(1);
 
         assertEquals(2, map.size());
+        assertEquals("Hollo", s);
         System.out.println(" ");
     }
 }

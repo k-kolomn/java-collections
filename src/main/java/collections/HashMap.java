@@ -124,7 +124,7 @@ public class HashMap<K, V> implements Map<K, V> {
         var index = getIndex(data.length, k);
         var list = data[index];
 
-        if (list.isEmpty() || !list.contains(key)) return null;
+        if (list.isEmpty()) return null;
 
         for (Node<K, V> node : list) {
             if (node.getKey().equals(k)) {
@@ -218,7 +218,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public void putAll(Map<? extends K, ? extends V> map) {
-
+        // TODO: 21.06.22
     }
 
     @Override
@@ -291,21 +291,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean remove(Object key, Object value) {
-//        int index = getIndex(data.length, (K) key);
-//        var list = data[index];
-//
-//        if (list.size() == 0) return false;
-//        for (var node : list){
-//            if (node.getKey().equals(key) && node.getValue().equals(value)){
-//                list.remove(node);
-//                size--;
-//                return true;
-//            }
-//        }
-        if (remove(key).equals(value)){
-            return true;
-        }
-        return false;
+        return remove(key).equals(value);
     }
 
     @Override
@@ -340,12 +326,13 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
-
+        // TODO: 21.06.22 realize this
         return null;
     }
 
     @Override
     public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        // TODO: 21.06.22
         return null;
     }
 
@@ -355,7 +342,7 @@ public class HashMap<K, V> implements Map<K, V> {
         if (containsKey(key)) {
             for (LinkedList<Node<K, V>> list : data) {
                 for (Node<K,V> node : list){
-
+                    // TODO: 21.06.22 realize this
                 }
             }
         }
@@ -364,6 +351,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+        // TODO: 21.06.22
         return null;
     }
 
