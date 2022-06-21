@@ -266,6 +266,7 @@ public class HashMap<K, V> implements Map<K, V> {
     public V getOrDefault(Object key, V defaultValue) {
         var get = get(key);
         return get == null ? defaultValue : get;
+
     }
 
     @Override
@@ -282,28 +283,64 @@ public class HashMap<K, V> implements Map<K, V> {
             put(entry.getKey(), newValue);
         }
     }
+
     @Override
     public V putIfAbsent(K key, V value) {
-        return containsKey(key) ? get(key): put(key, value);
+        return containsKey(key) ? get(key) : put(key, value);
     }
 
     @Override
     public boolean remove(Object key, Object value) {
+//        int index = getIndex(data.length, (K) key);
+//        var list = data[index];
+//
+//        if (list.size() == 0) return false;
+//        for (var node : list){
+//            if (node.getKey().equals(key) && node.getValue().equals(value)){
+//                list.remove(node);
+//                size--;
+//                return true;
+//            }
+//        }
+        if (remove(key).equals(value)){
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean replace(K key, V oldValue, V newValue) {
+
+        int index = getIndex(data.length, (K) key);
+        var list = data[index];
+
+        if (list.size() == 0) return false;
+        for (Node<K, V> node : list) {
+            if (node.getKey().equals(key) && node.getValue().equals(oldValue)) {
+                node.setValue(newValue);
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public V replace(K key, V value) {
+        var old = get(key);
+        for (LinkedList<Node<K, V>> list : data) {
+            for (Node<K, V> node : list) {
+                if (node.getKey().equals(key)) {
+                    node.setValue(value);
+                    return old;
+                }
+            }
+        }
         return null;
     }
 
     @Override
     public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+
         return null;
     }
 
@@ -314,6 +351,14 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        if (remappingFunction == null) return null;
+        if (containsKey(key)) {
+            for (LinkedList<Node<K, V>> list : data) {
+                for (Node<K,V> node : list){
+
+                }
+            }
+        }
         return null;
     }
 
