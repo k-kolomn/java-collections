@@ -148,7 +148,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
         if (list.size() == 0 || !list.contains(kvNode)) {
             list.add(kvNode);
-            return null;
+            return value;
         }
 
         for (Node<K, V> node : list) {
@@ -282,7 +282,7 @@ public class HashMap<K, V> implements Map<K, V> {
     public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
         for (Entry<K, V> entry : entrySet()) {
             var newValue = function.apply(entry.getKey(), entry.getValue());
-            put(entry.getKey(), newValue);
+            replace(entry.getKey(), newValue);
         }
     }
 
@@ -387,7 +387,11 @@ public class HashMap<K, V> implements Map<K, V> {
             return tmp;
         }
 
+        @Override
         public int hashCode() {
+            if (value == null) {
+                return key.hashCode();
+            }
             return key.hashCode() + value.hashCode() / 2;
         }
 

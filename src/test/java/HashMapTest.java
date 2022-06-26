@@ -104,4 +104,31 @@ public class HashMapTest {
         assertEquals(3, result.size());
     }
 
+    @Test
+    public void testGetOrDefault() {
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1,"HI");
+        map.put(2,"Poka");
+        map.put(8,"Darova");
+
+        var get1 = map.getOrDefault(1,"privet");
+        var get2 = map.getOrDefault(3,"privet");
+
+        assertEquals("HI", get1);
+        assertEquals("privet", get2);
+    }
+
+    @Test
+    public void testPutIfAbsent() {
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1,"HI");
+        map.put(2,"Poka");
+        map.put(8, null);
+        map.putIfAbsent(8,"yaloh");
+
+        assertEquals("yaloh", map.get(8));
+        assertEquals(3, map.size());
+    }
 }
