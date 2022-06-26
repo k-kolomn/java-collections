@@ -110,7 +110,6 @@ public class HashMap<K, V> implements Map<K, V> {
                 }
             }
         }
-
         return false;
     }
 
@@ -218,7 +217,10 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public void putAll(Map<? extends K, ? extends V> map) {
-        // TODO: 21.06.22
+        var entrySet = map.entrySet();
+        for (var element : entrySet) {
+            put(element.getKey(), element.getValue());
+        }
     }
 
     @Override
@@ -326,33 +328,40 @@ public class HashMap<K, V> implements Map<K, V> {
 
     @Override
     public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
-        // TODO: 21.06.22 realize this
-        return null;
-    }
-
-    @Override
-    public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-        // TODO: 21.06.22
-        return null;
-    }
-
-    @Override
-    public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-        if (remappingFunction == null) return null;
-        if (containsKey(key)) {
-            for (LinkedList<Node<K, V>> list : data) {
-                for (Node<K,V> node : list){
-                    // TODO: 21.06.22 realize this
-                }
-            }
+        if (!(containsKey(key))) {
+            var value = mappingFunction.apply(key);
+            put(key, value);
+            return value;
         }
         return null;
     }
 
     @Override
-    public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
-        // TODO: 21.06.22
+    public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        if (containsKey(key)) {
+            return compute(key, remappingFunction);
+        }
         return null;
+    }
+
+    @Override
+    public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
+        var value = get(key);
+        var function = remappingFunction.apply(key, value);
+
+        return put(key, function);
+    }
+
+    @Override
+    public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+        var oldValue = get(key);
+        V newValue;
+        if (oldValue != null) {
+            newValue = remappingFunction.apply(oldValue, value);
+        } else {
+            newValue = value;
+        }
+        return put(key, newValue);
     }
 
 

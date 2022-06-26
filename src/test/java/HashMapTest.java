@@ -1,5 +1,8 @@
+import collections.ArraySet;
 import collections.HashMap;
 import collections.LinkedList;
+import collections.Set;
+import org.assertj.core.internal.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -44,4 +47,61 @@ public class HashMapTest {
         assertEquals("Hollo", s);
         System.out.println(" ");
     }
+
+    @Test
+    public void testReplace(){
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1,"HI");
+        map.put(2,"Poka");
+        map.put(8,"Darova");
+
+        map.replace(1, "Niger");
+        assertEquals(3, map.size());
+        assertEquals("Niger", map.get(1));
+    }
+
+    @Test
+    public void testReplaceAll(){
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1,"HI");
+        map.put(2,"Poka");
+        map.put(8,"Darova");
+
+        map.replaceAll((k,v) -> "1");
+        assertEquals("1", map.get(1));
+        assertEquals("1", map.get(2));
+        assertEquals("1", map.get(8));
+
+    }
+
+    @Test
+    public void testKeySet(){
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1,"HI");
+        map.put(2,"Poka");
+        map.put(8,"Darova");
+
+        ArraySet<Integer> result = (ArraySet<Integer>) map.keySet();
+
+        assertEquals(3, result.size());
+        assertTrue(result.contains(1));
+    }
+
+    @Test
+    public void testValues(){
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1,"HI");
+        map.put(2,"Poka");
+        map.put(8,"Darova");
+
+        LinkedList<String> result = (LinkedList<String>) map.values();
+
+        assertTrue(result.contains("HI"));
+        assertEquals(3, result.size());
+    }
+
 }
