@@ -174,6 +174,11 @@ public class HashMapTest {
         map.put(1,"HI");
         map.put(2,"Poka");
         map.put(8, null);
+        map.put(8, null);
+        map.put(8, null);
+        map.put(8, null);
+        map.put(8, null);
+        map.put(8, null);
         map.putIfAbsent(8,"yaloh");
 
         assertEquals("yaloh", map.get(8));

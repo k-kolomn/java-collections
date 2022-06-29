@@ -1,5 +1,6 @@
 import collections.ArrayList;
 import collections.LinkedList;
+import collections.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class ArrayListTest {
     @Test
     public void testAddElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         Assertions.assertEquals(2, list.size());
@@ -18,7 +19,7 @@ public class ArrayListTest {
 
     @Test
     public void testAddByIndexElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(0,1);
         list.add(1,2);
         list.add(1,3);
@@ -28,7 +29,7 @@ public class ArrayListTest {
 
     @Test
     public void testIteratorElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.iterator();
@@ -37,7 +38,7 @@ public class ArrayListTest {
 
     @Test
     public void testToArrayElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.toArray();
@@ -46,7 +47,7 @@ public class ArrayListTest {
 
     @Test
     public void testCopyElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.copy();
@@ -55,7 +56,7 @@ public class ArrayListTest {
 
     @Test
     public void testGetElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         int listGet = list.get(0);
         Assertions.assertEquals(1, listGet);
@@ -63,13 +64,13 @@ public class ArrayListTest {
 
     @Test
     public void testGetElementThatDoesNotExist() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         assertThatThrownBy(() -> list.get(1));
     }
 
     @Test
     public void testSetElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.set(0, 2);
         Assertions.assertEquals(2, list.get(0));
@@ -77,13 +78,13 @@ public class ArrayListTest {
 
     @Test
     public void testSetElementThatDoesNotExist() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         assertThatThrownBy(() -> list.set(1, 1));
     }
 
     @Test
     public void testRemoveElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.remove(0);
@@ -92,13 +93,13 @@ public class ArrayListTest {
 
     @Test
     public void testRemoveElementThatDoesNotExist() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         assertThatThrownBy(() -> list.remove(10));
     }
 
     @Test
     public void testRemoveFirstElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(1);
@@ -110,7 +111,7 @@ public class ArrayListTest {
 
     @Test
     public void testRemoveLastElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(1);
@@ -122,7 +123,7 @@ public class ArrayListTest {
 
     @Test
     public void testIndexOfElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -133,7 +134,7 @@ public class ArrayListTest {
 
     @Test
     public void testContainsElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         boolean contains = list.contains(1);
         Assertions.assertTrue(contains);
@@ -142,7 +143,7 @@ public class ArrayListTest {
 
     @Test
     public void testClearElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.clear();
@@ -151,7 +152,7 @@ public class ArrayListTest {
 
     @Test
     public void testIsEmptyElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         boolean isEmpty = list.isEmpty();
@@ -160,7 +161,7 @@ public class ArrayListTest {
 
     @Test
     public void testForEachElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -175,7 +176,7 @@ public class ArrayListTest {
 
     @Test
     public void testChangeAllElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
 
@@ -187,7 +188,7 @@ public class ArrayListTest {
 
     @Test
     public void testChangeIfElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(1);
@@ -201,7 +202,7 @@ public class ArrayListTest {
 
     @Test
     public void testRemoveIfElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -215,7 +216,7 @@ public class ArrayListTest {
 
     @Test
     public void testRemoveIfPresentElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -227,7 +228,7 @@ public class ArrayListTest {
 
     @Test
     public void testAddAndProcessElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
 
@@ -238,7 +239,7 @@ public class ArrayListTest {
 
     @Test
     public void testTransformElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
 
@@ -250,7 +251,7 @@ public class ArrayListTest {
 
     @Test
     public void testReduceElement() {
-        ArrayList<Integer> list = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -262,8 +263,8 @@ public class ArrayListTest {
 
     @Test
     public void testRetainAll() {
-        ArrayList<Integer> list = new ArrayList<>();
-        ArrayList<Integer> retainList = new ArrayList<>();
+        List<Integer> list = new ArrayList<>();
+        List<Integer> retainList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             list.add(i);
 

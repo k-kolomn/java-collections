@@ -40,6 +40,23 @@ public class ArrayList<E> implements List<E> {
         this.comparator = comparator;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        List<E> other;
+        try {
+            other = (List<E>) o;
+        } catch (ClassCastException ignored) {
+            return false;
+        }
+        if (this.size != other.size()) return false;
+        for (var e: other) {
+            if (!this.contains(e)) return false;
+        }
+        return true;
+    }
+
     @SuppressWarnings("unchecked")
     private void resize() {
         int newSize = (int) (size * RESIZE_KOEF);

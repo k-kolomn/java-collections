@@ -37,7 +37,6 @@ public interface List <E> extends Collection<E> {
 
     boolean removeLast(E element);
 
-
     boolean changeAll(UnaryOperator<E> operator);
 
     boolean changeIf(Predicate<E> predicate, UnaryOperator<E> operator);

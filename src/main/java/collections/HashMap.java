@@ -142,6 +142,7 @@ public class HashMap<K, V> implements Map<K, V> {
 
         var list = data[index];
 
+        size++;
 
         Node<K, V> kvNode = new Node<>(key, value);
 
