@@ -6,6 +6,7 @@ import org.assertj.core.internal.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,7 +21,7 @@ public class HashMapTest {
         map.put(2,1);
         map.put(8,5);
 
-       assertEquals(3, map.size());
+        assertEquals(3, map.size());
     }
 
     @Test
@@ -32,6 +33,18 @@ public class HashMapTest {
         map.put(8,"Hollo");
 
         assertEquals("Hollo", map.get(1));
+    }
+
+    @Test
+    public void testGetCases(){
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1,"Hollo");
+        map.put(2,"Hollo");
+        map.put(8,"Hollo");
+
+        assertThatThrownBy(() -> map.get(3));
+
     }
 
     @Test
@@ -49,6 +62,17 @@ public class HashMapTest {
     }
 
     @Test
+    public void testRemoveCases(){
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1,"Hollo");
+        map.put(2,"Hollo");
+        map.put(8,"Hollo");
+
+        assertThatThrownBy(() -> map.remove(3));
+    }
+
+    @Test
     public void testReplace(){
         HashMap<Integer, String> map = new HashMap<>();
 
@@ -60,16 +84,26 @@ public class HashMapTest {
         assertEquals(3, map.size());
         assertEquals("Niger", map.get(1));
     }
-
     @Test
-    public void testReplaceAll(){
+    public void testReplaceCases(){
         HashMap<Integer, String> map = new HashMap<>();
 
-        map.put(1,"HI");
-        map.put(2,"Poka");
-        map.put(8,"Darova");
+        map.put(1,"Hollo");
+        map.put(2,"Hollo");
+        map.put(8,"Hollo");
 
-        map.replaceAll((k,v) -> "1");
+        assertThatThrownBy(() -> map.replace(3, "h1"));
+
+    }
+    @Test
+    public void testReplaceAll() {
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1, "HI");
+        map.put(2, "Poka");
+        map.put(8, "Darova");
+
+        map.replaceAll((k, v) -> map.put(k, "1"));
         assertEquals("1", map.get(1));
         assertEquals("1", map.get(2));
         assertEquals("1", map.get(8));
@@ -88,6 +122,17 @@ public class HashMapTest {
 
         assertEquals(3, result.size());
         assertTrue(result.contains(1));
+    }
+
+    @Test
+    public void testKeySetCases(){
+        HashMap<Integer, String> map = new HashMap<>();
+
+        map.put(1,"Hollo");
+        map.put(2,"Hollo");
+        map.put(8,"Hollo");
+
+
     }
 
     @Test
