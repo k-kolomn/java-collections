@@ -14,7 +14,7 @@ public class HashMapTest {
 
     @Test
     public void testPut() {
-        HashMap<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>();
         map.put(1,3);
         map.put(2,1);
         map.put(8,5);
@@ -23,14 +23,12 @@ public class HashMapTest {
 
     @Test
     public void testPutCases() {
-        HashMap<Integer, String> map = new HashMap<>(10);
-
+        Map<Integer, String> map = new HashMap<>(10);
         map.put(1,"Hollo");
         map.put(2,"Hollo");
         map.put(3,"Hollo");
         map.put(4,"Hollo");
         map.put(5,"Hollo");
-
         assertNotNull(map.get(1));
         assertNotNull(map.get(2));
         assertNotNull(map.get(3));
@@ -41,20 +39,20 @@ public class HashMapTest {
 
     @Test
     public void testGet(){
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
         map.put(1,"Hollo");
         assertEquals("Hollo", map.get(1));
     }
 
     @Test
     public void testGetCases(){
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
         assertNull(map.get(1));
     }
 
     @Test
     public void testRemove(){
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
         map.put(1,"Hollo");
         var s = map.remove(1);
         assertEquals(0, map.size());
@@ -63,13 +61,13 @@ public class HashMapTest {
 
     @Test
     public void testRemoveCases(){
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
         assertNull(map.remove(1));
     }
 
     @Test
     public void testReplace(){
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
         map.put(1,"HI");
         map.replace(1, "Afro-american");
         assertEquals(1, map.size());
@@ -77,12 +75,12 @@ public class HashMapTest {
     }
     @Test
     public void testReplaceCases(){
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
         assertNull(map.replace(1, "h1"));
     }
     @Test
     public void testReplaceAll() {
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
         map.put(1, "HI");
         map.put(2, "Poka");
         map.put(8, "Darova");
@@ -101,7 +99,7 @@ public class HashMapTest {
         map.put(2,"Poka");
         map.put(8,"Darova");
 
-        Set<Integer> result = map.keySet();
+        var result = map.keySet();
 
         assertEquals(3, result.size());
         assertTrue(result.contains(1));
@@ -111,7 +109,7 @@ public class HashMapTest {
 
     @Test
     public void testKeySetCases(){
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
         var result = map.keySet();
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -119,13 +117,13 @@ public class HashMapTest {
 
     @Test
     public void testValues(){
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
 
         map.put(1,"HI");
         map.put(2,"Poka");
         map.put(8,"Darova");
 
-        Collection<String> result = map.values();
+        var result = map.values();
 
         assertTrue(result.contains("HI"));
         assertTrue(result.contains("Poka"));
@@ -135,13 +133,13 @@ public class HashMapTest {
 
     @Test
     public void testValuesCases(){
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
 
         map.put(1,"HI");
         map.put(2,"HI");
         map.put(8,"HI");
 
-        Collection<String> result = map.values();
+        var result = map.values();
 
         assertTrue(result.contains("HI"));
         assertFalse(result.contains("Poka"));
@@ -156,7 +154,7 @@ public class HashMapTest {
 
     @Test
     public void testGetOrDefault() {
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
 
         map.put(1,"HI");
         map.put(2,"Poka");
@@ -171,7 +169,7 @@ public class HashMapTest {
 
     @Test
     public void testPutIfAbsent() {
-        HashMap<Integer, String> map = new HashMap<>();
+        Map<Integer, String> map = new HashMap<>();
 
         map.put(1,"HI");
         map.put(2,"Poka");
