@@ -269,7 +269,9 @@ public class LinkedList<E> implements List<E> {
         if (size == 1) {
             old = head.getData();
             clear();
-        } else if (index == 0) {
+            return old;
+        }
+        if (index == 0) {
             old = head.getData();
             head = head.getNext();
         } else if (index == size - 1) {

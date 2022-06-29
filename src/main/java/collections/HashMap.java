@@ -123,15 +123,15 @@ public class HashMap<K, V> implements Map<K, V> {
         var index = getIndex(data.length, k);
         var list = data[index];
 
-        if (list.isEmpty()) return null;
-
-        for (Node<K, V> node : list) {
-            if (node.getKey().equals(k)) {
-                return node.getValue();
+        if (!list.isEmpty()) {
+            for (Node<K, V> node : list) {
+                if (node.getKey().equals(k)) {
+                    return node.getValue();
+                }
             }
         }
 
-        throw new RuntimeException("Error occurred!");
+        return null;
     }
 
     @Override
@@ -142,24 +142,22 @@ public class HashMap<K, V> implements Map<K, V> {
 
         var list = data[index];
 
-        size++;
 
         Node<K, V> kvNode = new Node<>(key, value);
 
-        if (list.size() == 0 || !list.contains(kvNode)) {
-            list.add(kvNode);
-            return value;
-        }
-
-        for (Node<K, V> node : list) {
-            if (node.getKey().equals(key)) {
-                var tmp = node.getValue();
-                node.setValue(value);
-                return tmp;
+        if (list.size() != 0) {
+            for (Node<K, V> node : list) {
+                if (node.getKey().equals(key)) {
+                    var tmp = node.getValue();
+                    node.setValue(value);
+                    return tmp;
+                }
             }
         }
 
-        throw new RuntimeException("Error occurred!");
+        size++;
+        list.add(kvNode);
+        return value;
     }
 
     private void checkLoadFactor() {
