@@ -103,7 +103,7 @@ public class HashMapTest {
         map.put(2, "Poka");
         map.put(8, "Darova");
 
-        map.replaceAll((k, v) -> map.put(k, "1"));
+        map.replaceAll((k,v) -> "1");
         assertEquals("1", map.get(1));
         assertEquals("1", map.get(2));
         assertEquals("1", map.get(8));
