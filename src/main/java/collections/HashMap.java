@@ -142,15 +142,15 @@ public class HashMap<K, V> implements Map<K, V> {
 
         var list = data[index];
 
-        size++;
-
         Node<K, V> kvNode = new Node<>(key, value);
 
         if (list.size() != 0) {
             for (Node<K, V> node : list) {
                 if (node.getKey().equals(key)) {
                     var tmp = node.getValue();
-                    node.setValue(value);
+                    if (node.getValue() == null) {
+                        replace(key, value);
+                    }
                     return tmp;
                 }
             }

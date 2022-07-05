@@ -1,5 +1,6 @@
 import collections.ArrayList;
 import collections.ArraySet;
+import collections.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class ArraySetTest {
     @Test
     public void testAddElement() {
-        ArraySet<Integer> set = new ArraySet<>();
+        Set<Integer> set = new ArraySet<>();
         set.add(1);
         set.add(2);
         Assertions.assertEquals(2, set.size());
@@ -16,71 +17,80 @@ public class ArraySetTest {
 
     @Test
     public void testAddNullElement() {
-        ArraySet<Integer> set = new ArraySet<>();
-        assertThatThrownBy(() -> set.add(null));
+        Set<Integer> set = new ArraySet<>();
+        Assertions.assertTrue(set.add(null));
     }
 
     @Test
     public void testIteratorElement() {
-        ArraySet<Integer> list = new ArraySet<>();
-        list.add(1);
-        list.add(2);
-        list.iterator();
-        Assertions.assertEquals(2, list.size());
+        Set<Integer> set = new ArraySet<>();
+        set.add(1);
+        set.add(2);
+        set.iterator();
+        Assertions.assertEquals(2, set.size());
     }
 
     @Test
     public void testToArrayElement() {
-        ArraySet<Integer> list = new ArraySet<>();
-        list.add(1);
-        list.add(2);
-        list.toArray();
-        Assertions.assertEquals(2, list.size());
+        Set<Integer> set = new ArraySet<>();
+        set.add(1);
+        set.add(2);
+        set.toArray();
+        Assertions.assertEquals(2, set.size());
     }
 
     @Test
     public void testCopyElement() {
-        ArraySet<Integer> list = new ArraySet<>();
-        list.add(1);
-        list.add(2);
-        list.copy();
-        Assertions.assertEquals(2, list.size());
+        Set<Integer> set = new ArraySet<>();
+        set.add(1);
+        set.add(2);
+        set.copy();
+        Assertions.assertEquals(2, set.size());
     }
 
-//    @Test
-//    public void testCopyOfElement() {
-//        ArraySet<Integer> list = new ArraySet<>();
-//        list.add(1);
-//        list.add(2);
-//        list.copyOf();
-//    }
+    @Test
+    public void testCopyOfElement() {
+        Set<Integer> set = new ArraySet<>();
+        set.add(1);
+        set.add(2);
+        var result = set.copyOf(set);
+        Assertions.assertEquals(2, result.size());
+    }
 
-//    @Test
-//    public void testRetainAllElement() {
-//        ArraySet<Integer> list = new ArraySet<>();
-//        list.add(1);
-//        list.add(2);
-//        list.retainAll();
-//    }
+
+    @Test
+    public void testRetainAllElement() {
+        Set<Integer> set = new ArraySet<>();
+        set.add(1);
+        set.add(2);
+        set.add(3);
+        set.add(4);
+        Set<Integer> setToRetain = new ArraySet<>();
+        setToRetain.add(2);
+        setToRetain.add(3);
+        var result = set.retainAll(setToRetain);
+        Assertions.assertTrue(result);
+        Assertions.assertEquals(setToRetain, set);
+    }
 
     @Test
     public void testRemoveElement() {
-        ArraySet<Integer> set = new ArraySet<>();
+        Set<Integer> set = new ArraySet<>();
         set.add(1);
         set.add(2);
-        set.remove(0);
+        set.remove(1);
         Assertions.assertEquals(1, set.size());
     }
 
     @Test
     public void testRemoveElementThatDoesNotExist() {
-        ArraySet<Integer> set = new ArraySet<>();
-        assertThatThrownBy(() -> set.remove(10));
+        Set<Integer> set = new ArraySet<>();
+        Assertions.assertFalse(set.remove(10));
     }
 
     @Test
     public void testRemoveIfElement() {
-        ArraySet<Integer> set = new ArraySet<>();
+        Set<Integer> set = new ArraySet<>();
         set.add(1);
         set.add(2);
         set.add(3);
@@ -92,7 +102,7 @@ public class ArraySetTest {
 
     @Test
     public void testContainsElement() {
-        ArraySet<Integer> set = new ArraySet<>();
+        Set<Integer> set = new ArraySet<>();
         set.add(1);
         boolean contains = set.contains(1);
         Assertions.assertTrue(contains);
@@ -100,13 +110,13 @@ public class ArraySetTest {
 
     @Test
     public void testContainsElementThatDoesNotExist() {
-        ArraySet<Integer> set = new ArraySet<>();
+        Set<Integer> set = new ArraySet<>();
         Assertions.assertFalse(set.contains(12));
     }
 
     @Test
     public void testClearElement() {
-        ArraySet<Integer> set = new ArraySet<>();
+        Set<Integer> set = new ArraySet<>();
         set.add(1);
         set.add(2);
         set.add(3);

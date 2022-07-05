@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LinkedSetTest {
 
@@ -41,7 +40,7 @@ public class LinkedSetTest {
     @Test
     public void testRemoveElementThatDoesNotExist() {
         Set<Integer> set = new LinkedSet<>();
-        assertThatThrownBy(() -> set.remove(10));
+        assertFalse(set.remove(10));
     }
 
     @Test

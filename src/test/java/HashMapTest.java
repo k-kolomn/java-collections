@@ -184,4 +184,18 @@ public class HashMapTest {
         assertEquals("yaloh", map.get(8));
         assertEquals(3, map.size());
     }
+
+    @Test
+    public void testCompute(){
+        Map<Integer, Integer> map = new HashMap<>();
+
+        map.put(1, 2);
+        map.put(2, 4);
+
+        var result = map.compute(1, Integer::sum);
+
+        assertEquals(3, map.get(1));
+    }
+
+
 }

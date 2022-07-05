@@ -39,7 +39,7 @@ public abstract class AbstractList<E> implements List<E> {
     public E[] toArray(E[] array) {
         int size = size();
         if (array.length < size) {
-            E[] result = (E[]) Array.newInstance(array.getClass().componentType(), size);
+            E[] result = (E[]) Array.newInstance(array.getClass().getComponentType(), size);
             for (int i = 0; i < size; i++) {
                 result[i] = get(i);
             }
