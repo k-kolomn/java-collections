@@ -1,3 +1,4 @@
+import collections.ArraySet;
 import collections.LinkedSet;
 import collections.Set;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LinkedSetTest {
-
 
     @Test
     public void testAdd(){
@@ -80,5 +80,14 @@ public class LinkedSetTest {
         Set<Integer> setCopy = (LinkedSet<Integer>) set.copy();
 
         assertEquals(set.size(), setCopy.size());
+    }
+
+    @Test
+    public void testCopyOf() {
+        Set<Integer> set = new LinkedSet<>();
+        set.add(1);
+        set.add(2);
+        var result = set.copyOf(set);
+        Assertions.assertEquals(2, result.size());
     }
 }
