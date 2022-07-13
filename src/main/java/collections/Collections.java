@@ -13,9 +13,8 @@ public class Collections {
         EMPTY_SET = new ArraySet<>();
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> List<T> emptyList() {
-        return ((List<T>) EMPTY_LIST).copy();
+        return new ArrayList<>();
     }
 
     @SuppressWarnings("unchecked")
