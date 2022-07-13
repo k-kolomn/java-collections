@@ -142,22 +142,18 @@ public class HashMap<K, V> implements Map<K, V> {
 
         var list = data[index];
 
-        Node<K, V> kvNode = new Node<>(key, value);
-
         if (list.size() != 0) {
             for (Node<K, V> node : list) {
                 if (node.getKey().equals(key)) {
                     var tmp = node.getValue();
-                    if (node.getValue() == null) {
-                        replace(key, value);
-                    }
+                    node.setValue(value);
                     return tmp;
                 }
             }
         }
 
         size++;
-        list.add(kvNode);
+        list.add(new Node<>(key, value));
         return value;
     }
 

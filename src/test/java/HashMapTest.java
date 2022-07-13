@@ -197,7 +197,8 @@ public class HashMapTest {
                 ? 1
                 : val + 5);
 
-        assertEquals(9, result);
+        assertEquals(4, result);
+        assertEquals(9, map.get(2));
     }
 
     @Test
