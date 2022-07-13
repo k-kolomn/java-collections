@@ -1,4 +1,5 @@
 import collections.LinkedList;
+import collections.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class LinkedListTest {
     @Test
     public void testAddElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         Assertions.assertEquals(2, list.size());
@@ -20,7 +21,7 @@ public class LinkedListTest {
 
     @Test
     public void testGetElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         int listGet = list.get(0);
         Assertions.assertEquals(1, listGet);
@@ -28,13 +29,13 @@ public class LinkedListTest {
 
     @Test
     public void testGetElementThatDoesNotExist() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         assertThatThrownBy(() -> list.get(1));
     }
 
     @Test
     public void testSetElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.set(0, 2);
         Assertions.assertEquals(2, list.get(0));
@@ -45,13 +46,13 @@ public class LinkedListTest {
 
     @Test
     public void testSetElementThatDoesNotExist() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         assertThatThrownBy(() -> list.set(1, 1));
     }
 
     @Test
     public void testRemoveElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.remove(0);
@@ -60,13 +61,13 @@ public class LinkedListTest {
 
     @Test
     public void testRemoveElementThatDoesNotExist() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         assertThatThrownBy(() -> list.remove(10));
     }
 
     @Test
     public void testRemoveFirstElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.add(1);
@@ -77,7 +78,7 @@ public class LinkedListTest {
 
     @Test
     public void testRemoveLastElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.add(1);
@@ -88,7 +89,7 @@ public class LinkedListTest {
 
     @Test
     public void testIndexOfElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -98,7 +99,7 @@ public class LinkedListTest {
 
     @Test
     public void testContainsElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         boolean contains = list.contains(1);
         Assertions.assertTrue(contains);
@@ -106,7 +107,7 @@ public class LinkedListTest {
 
     @Test
     public void testClearElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.clear();
@@ -115,7 +116,7 @@ public class LinkedListTest {
 
     @Test
     public void testForEachElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -130,7 +131,7 @@ public class LinkedListTest {
 
     @Test
     public void testChangeAllElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
 
@@ -142,7 +143,7 @@ public class LinkedListTest {
 
     @Test
     public void testChangeIfElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.add(1);
@@ -156,7 +157,7 @@ public class LinkedListTest {
 
     @Test
     public void testRemoveIfElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -170,7 +171,7 @@ public class LinkedListTest {
 
     @Test
     public void testRemoveIfPresentElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -182,7 +183,7 @@ public class LinkedListTest {
 
     @Test
     public void testAddAndProcessElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
 
@@ -192,7 +193,7 @@ public class LinkedListTest {
 
     @Test
     public void testProcessIf() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(3);
 
@@ -204,7 +205,7 @@ public class LinkedListTest {
 
     @Test
     public void testTransformElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
 
@@ -216,7 +217,7 @@ public class LinkedListTest {
 
     @Test
     public void testReduceElement() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
         list.add(1);
         list.add(2);
         list.add(3);
@@ -228,7 +229,7 @@ public class LinkedListTest {
 
     @Test
     public void testReduceOverflowByte() {
-        LinkedList<Byte> list = new LinkedList<>();
+        List<Byte> list = new LinkedList<>();
         list.add((byte) 120);
         list.add((byte) 7);
 
@@ -241,7 +242,7 @@ public class LinkedListTest {
 
     @Test
     public void testSublist() {
-        LinkedList<Integer> numbers = new LinkedList<>();
+        List<Integer> numbers = new LinkedList<>();
 
         numbers.add(1);
         numbers.add(2);
@@ -258,12 +259,12 @@ public class LinkedListTest {
 
     @Test
     public void testAddAll() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
 
         list.add(1);
         list.add(2);
 
-        LinkedList<Integer> list2 = new LinkedList<>();
+        List<Integer> list2 = new LinkedList<>();
 
         list2.add(3);
         list2.add(4);
@@ -275,12 +276,12 @@ public class LinkedListTest {
 
     @Test
     public void testAddAllByIndex() {
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
 
         list.add(1);
         list.add(2);
 
-        LinkedList<Integer> list2 = new LinkedList<>();
+        List<Integer> list2 = new LinkedList<>();
 
         list2.add(3);
         list2.add(4);
@@ -294,9 +295,9 @@ public class LinkedListTest {
     }
 
     @Test
-    public void testCopy(){
+    public void testCopy() {
 
-        LinkedList<Integer> list = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
 
         list.add(3);
         list.add(4);
@@ -307,8 +308,8 @@ public class LinkedListTest {
 
     @Test
     public void testRetainAll() {
-        LinkedList<Integer> list = new LinkedList<>();
-        LinkedList<Integer> retainList = new LinkedList<>();
+        List<Integer> list = new LinkedList<>();
+        List<Integer> retainList = new LinkedList<>();
         for (int i = 0; i < 10; i++) {
             list.add(i);
 

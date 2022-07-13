@@ -12,10 +12,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-public class LinkedList<E> extends AbstractList<E> {
+public class LinkedList<E> implements List<E> {
 
     private Node<E> head;
     private Node<E> tail;
+
+    private int size;
+
+    private Comparator<? super E> comparator;
 
     public LinkedList() {
         size = 0;
@@ -29,6 +33,12 @@ public class LinkedList<E> extends AbstractList<E> {
         head = null;
         tail = null;
 
+    }
+
+
+    @Override
+    public int size() {
+        return size;
     }
 
     public Iterator<E> iterator() {
@@ -83,6 +93,38 @@ public class LinkedList<E> extends AbstractList<E> {
     }
 
     @Override
+    public boolean contains(Object o) {
+        return indexOf(o) != -1;
+    }
+
+    @Override
+    public Object toArray() {
+        Object[] result = new Object[size];
+        int i = 0;
+        for (var x = head; x != null; x = x.next) {
+            result[i++] = x.data;
+        }
+
+        return result;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public E[] toArray(E[] array) {
+        if (array.length < size) {
+            E[] result = (E[]) Array.newInstance(array.getClass().componentType(), size);
+            for (int i = 0; i < size; i++) {
+                result[i] = get(i);
+            }
+
+            return result;
+        } else {
+            System.arraycopy(toArray(), 0, array, 0, size);
+            return array;
+        }
+    }
+
+    @Override
     public boolean add(E elem) {
         var newNode = new Node<>(elem);
 
@@ -104,6 +146,24 @@ public class LinkedList<E> extends AbstractList<E> {
     private void linkNodes(Node<E> first, Node<E> second) {
         first.setNext(second);
         second.setPrevious(first);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean remove(Object o) {
+        return removeFirst((E) o);
+    }
+
+    @Override
+    public boolean removeIf(Predicate<? super E> predicate) {
+        for (int i = 0; i < size; i++) {
+            var currentNode = getNode(i);
+            if (predicate.test(currentNode.getData())) {
+                remove(currentNode.getData());
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -130,6 +190,28 @@ public class LinkedList<E> extends AbstractList<E> {
             add(e);
         }
         return true;
+    }
+
+    @Override
+    public void sort(Comparator<? super E> comparator) {
+        Collections.sort(this, comparator);
+    }
+
+    @Override
+    public void sort() {
+        Comparator<? super E> comp;
+
+        if (comparator != null) {
+            comp = comparator;
+        } else if (size > 0 && head.getData() instanceof Comparable<?>) {
+            comp = (a, b) -> ((Comparable<E>) a).compareTo(b);
+        } else {
+            throw new IllegalArgumentException(
+                    "No comparator found and items does not implement Comparable!"
+            );
+        }
+
+        Collections.sort(this, comp);
     }
 
     @Override
@@ -187,9 +269,7 @@ public class LinkedList<E> extends AbstractList<E> {
         if (size == 1) {
             old = head.getData();
             clear();
-            return old;
-        }
-        if (index == 0) {
+        } else if (index == 0) {
             old = head.getData();
             head = head.getNext();
         } else if (index == size - 1) {
@@ -204,6 +284,216 @@ public class LinkedList<E> extends AbstractList<E> {
         size--;
 
         return old;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int indexOf(Object o) {
+        var element = (E) o;
+
+        if (size == 0) return -1;
+
+        int counter = 0;
+        var currentNode = head;
+        while (currentNode != null) {
+            if (currentNode.getData().equals(o)) {
+                return counter;
+            }
+
+            counter++;
+            currentNode = currentNode.getNext();
+        }
+        return -1;
+    }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int lastIndexOf(Object o) {
+        var element = (E) o;
+
+        if (size == 0) return -1;
+
+        int counter = size - 1;
+        var currentNode = tail;
+        while (currentNode != null) {
+            if (currentNode.getData().equals(o)) {
+                return counter;
+            }
+
+            counter--;
+            currentNode = currentNode.getPrevious();
+        }
+        return -1;
+    }
+
+    @Override
+    public List<E> sublist(int start, int end) {
+        sublistIndexCheck(start, end);
+
+        LinkedList<E> list = new LinkedList<>();
+
+        for (int i = start; i < end; i++) {
+            list.add(get(i));
+        }
+        return list;
+    }
+
+    private void sublistIndexCheck(int start, int end) {
+        if (start > end) {
+            throw new IllegalArgumentException("Start index greater than end index!");
+        }
+        if (start < 0) {
+            throw new IndexOutOfBoundsException("Start index lower than zero!");
+        }
+        if (end > size) {
+            throw new IndexOutOfBoundsException("End index greater than size!");
+        }
+    }
+
+    @Override
+    public List<E> copy() {
+        LinkedList<E> list = new LinkedList<>();
+        list.addAll(this);
+        return list;
+    }
+
+    @Override
+    public List<E> copyOf(Collection<? extends E> collection) {
+        LinkedList<E> list = new LinkedList<>();
+        list.addAll(this);
+        list.addAll(collection);
+
+        return list;
+    }
+
+    @Override
+    public boolean removeFirst(E element) {
+        if (size == 0) return false;
+
+        if (head.getData().equals(element)) {
+            remove(0);
+            return true;
+        }
+
+        for (int i = 0; i < size; i++) {
+            var currentNode = getNode(i);
+            if (currentNode.getData().equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean removeLast(E element) {
+        if (size == 0) return false;
+
+        if (tail.getData().equals(element)) {
+            remove(size - 1);
+            return true;
+        }
+
+        for (int i = size - 1; i >= 0; i--) {
+            var currentNode = getNode(i);
+            if (currentNode.getData().equals(element)) {
+                remove(i);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean changeAll(UnaryOperator<E> operator) {
+        for (int i = 0; i < size; i++) {
+            var currentNode = getNode(i);
+            currentNode.setData(
+                    operator.apply(
+                            currentNode.getData()
+                    )
+            );
+        }
+        return true;
+    }
+
+    @Override
+    public boolean changeIf(Predicate<E> predicate, UnaryOperator<E> operator) {
+        for (int i = 0; i < size; i++) {
+            var currentNode = getNode(i);
+            if (predicate.test(currentNode.getData())) {
+                currentNode.setData(
+                        operator.apply(
+                                currentNode.getData()
+                        )
+                );
+            }
+        }
+        size++;
+        return true;
+    }
+
+    @Override
+    public boolean removeIfPresent(E elem) {
+        if (contains(elem)) {
+            removeFirst(elem);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addAndProcess(E elem, Consumer<E> consumer) {
+        add(elem);
+        consumer.accept(elem);
+        return true;
+    }
+
+    @Override
+    public boolean forEachIf(Predicate<E> predicate, Consumer<E> consumer) {
+        for (int i = 0; i < size; i++) {
+            var currentNode = getNode(i);
+
+            if (predicate.test(currentNode.getData())) {
+                consumer.accept(currentNode.getData());
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public <P> List<P> transform(Function<E, P> transformFunction) {
+        LinkedList<P> list = new LinkedList<>();
+        for (int i = 0; i < size; i++) {
+            list.add(transformFunction.apply(get(i)));
+        }
+        return list;
+    }
+
+    @Override
+    public <P> List<P> transform(Predicate<E> predicate, Function<E, P> transformFunction) {
+        LinkedList<P> list = new LinkedList<>();
+        for (int i = 0; i < size; i++) {
+            var currentNode = getNode(i);
+            if (predicate.test(currentNode.getData())) {
+                list.add(transformFunction.apply(currentNode.getData()));
+            }
+        }
+
+        return list;
+    }
+
+    @Override
+    public E reduce(BinaryOperator<E> reduceOperator) {
+        if (size == 0) return null;
+        E result = head.getData();
+        for (int i = 1; i < size; i++) {
+            result = reduceOperator.apply(result, get(i));
+        }
+        return result;
     }
 
 

@@ -1,6 +1,7 @@
 package collections;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class LinkedSet<E> implements Set<E>{
