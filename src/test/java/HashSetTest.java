@@ -26,6 +26,7 @@ public class HashSetTest {
         Set<Integer> set = new HashSet<>();
         set.add(1);
         set.add(2);
+        // TODO: 13.07.22 test this pls -> iterator.next, iterator.hasNext, iterator.remove
         set.iterator();
         Assertions.assertEquals(2, set.size());
     }
