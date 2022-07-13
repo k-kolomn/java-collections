@@ -1,10 +1,13 @@
 import collections.ArrayList;
 import collections.ArraySet;
+import collections.LinkedSet;
 import collections.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ArraySetTest {
     @Test
@@ -37,6 +40,26 @@ public class ArraySetTest {
         set.add(2);
         set.toArray();
         Assertions.assertEquals(2, set.size());
+    }
+
+    @Test
+    public void testEquals() {
+        Set<Integer> set1 = new ArraySet<>();
+        Set<Integer> set2 = new ArraySet<>();
+        Set<Integer> set3 = new ArraySet<>();
+
+        set1.add(1);
+        set1.add(2);
+
+        set2.add(3);
+        set2.add(2);
+
+        set3.add(1);
+        set3.add(2);
+
+        assertNotEquals(set1, set2);
+        assertEquals(set1, set3);
+        assertEquals(set1, set1);
     }
 
     @Test

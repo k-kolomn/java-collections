@@ -10,17 +10,17 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LinkedSetTest {
 
     @Test
-    public void testAdd(){
+    public void testAdd() {
         Set<Integer> set = new LinkedSet<>();
 
         set.add(1);
         set.add(1);
 
-     assertEquals(1, set.size());
+        assertEquals(1, set.size());
     }
 
     @Test
-    public void testContains(){
+    public void testContains() {
         Set<Integer> set = new LinkedSet<>();
 
         set.add(1);
@@ -28,8 +28,9 @@ public class LinkedSetTest {
 
         assertTrue(set.contains(2));
     }
+
     @Test
-    public void testRemove(){
+    public void testRemove() {
         Set<Integer> set = new LinkedSet<>();
         set.add(1);
         set.add(2);
@@ -44,7 +45,7 @@ public class LinkedSetTest {
     }
 
     @Test
-    public void testRemoveIf(){
+    public void testRemoveIf() {
         Set<Integer> set = new LinkedSet<>();
         set.add(1);
         set.add(2);
@@ -57,7 +58,7 @@ public class LinkedSetTest {
     }
 
     @Test
-    public void testClear(){
+    public void testClear() {
         Set<Integer> set = new LinkedSet<>();
         set.add(2);
         set.add(1);
@@ -70,7 +71,27 @@ public class LinkedSetTest {
     }
 
     @Test
-    public void testCopy(){
+    public void testEquals() {
+        Set<Integer> set1 = new LinkedSet<>();
+        Set<Integer> set2 = new LinkedSet<>();
+        Set<Integer> set3 = new LinkedSet<>();
+
+        set1.add(1);
+        set1.add(2);
+
+        set2.add(3);
+        set2.add(2);
+
+        set3.add(1);
+        set3.add(2);
+
+        assertNotEquals(set1, set2);
+        assertEquals(set1, set3);
+        assertEquals(set1, set1);
+    }
+
+    @Test
+    public void testCopy() {
         Set<Integer> set = new LinkedSet<>();
         set.add(2);
         set.add(1);
