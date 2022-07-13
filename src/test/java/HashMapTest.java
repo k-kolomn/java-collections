@@ -231,14 +231,14 @@ public class HashMapTest {
                 (key, value) -> value++
         );
 
-        assertEquals(3, result1);
+        assertEquals(3, map.get(1));
         assertNotNull(result1);
 
         var result2 = map.computeIfPresent(2, (key, value) -> value--);
 
-        assertNull(
-                result2
-        );
+
+        assertEquals(3, map.get(2));
+        assertNotNull(result2);
     }
 
     @Test
@@ -248,7 +248,9 @@ public class HashMapTest {
         map.put(1, 2);
         map.put(2, 4);
 
-        var result1 = map.merge(1, 3, Integer::sum);
-        assertEquals(5, result1);
+        var result = map.merge(1, 3, Integer::sum);
+
+        assertEquals(5, map.get(1));
+        assertNotNull(result);
     }
 }
