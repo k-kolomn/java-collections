@@ -228,7 +228,7 @@ public class HashMapTest {
         map.put(2, 4);
 
         var result1 = map.computeIfPresent(1,
-                (key, value) -> ++value
+              (key ,value) -> ++value
         );
 
         assertEquals(3, map.get(1));

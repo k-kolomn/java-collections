@@ -63,7 +63,6 @@ public interface Collection <E> extends Iterable<E> {
                 iterator.remove();
             }
         }
-
         return true;
     }
 

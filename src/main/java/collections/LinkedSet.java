@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public class LinkedSet<E> implements Set<E>{
+public class LinkedSet<E> extends AbstractSet<E>{
 
     private final LinkedList<E> linkedList = new LinkedList<>();
 
@@ -43,7 +43,6 @@ public class LinkedSet<E> implements Set<E>{
         return linkedList.add(elem);
     }
 
-
     @Override
     public boolean remove(Object o) {
         return linkedList.remove(o);
@@ -56,33 +55,12 @@ public class LinkedSet<E> implements Set<E>{
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        return false;
+        return linkedList.retainAll(collection);
     }
 
     @Override
     public void clear() {
         linkedList.clear();
-    }
-
-    @SuppressWarnings("unchecked")
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (!(o instanceof Set<?>)) return false;
-
-        Set<E> other;
-        try {
-            other = (Set<E>) o;
-        } catch (ClassCastException ignored) {
-            return false;
-        }
-
-        if (this.size() != other.size()) return false;
-
-        for (var e: other) {
-            if (!this.contains(e)) return false;
-        }
-        return true;
     }
 
     @Override

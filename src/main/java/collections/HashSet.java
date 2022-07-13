@@ -3,7 +3,7 @@ package collections;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class HashSet<E> implements Set<E> {
+public class HashSet<E> extends AbstractSet<E>{
 
     private final Object dummyValue = new Object();
 
@@ -21,12 +21,12 @@ public class HashSet<E> implements Set<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return map.keySet().iterator();
+        return null;
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        return map.containsKey(o);
     }
 
     @Override
@@ -41,37 +41,37 @@ public class HashSet<E> implements Set<E> {
 
     @Override
     public boolean add(E elem) {
-        // TODO: 13.07.22 key=elem, value=dummyValue
-        return false;
+        return map.put(elem, dummyValue) == null;
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        return map.remove(o) != null;
     }
 
     @Override
     public boolean removeIf(Predicate<? super E> predicate) {
-        return false;
+        var iterator = iterator();
+        while (iterator.hasNext()) {
+            if (predicate.test(iterator.next())) {
+                iterator.remove();
+            }
+        }
+        return true;
     }
 
     @Override
     public void clear() {
-
+        map.clear();
     }
 
     @Override
     public Set<E> copy() {
-        return null;
+        return map.keySet().copy();
     }
 
     @Override
     public Set<E> copyOf(Collection<? extends E> collection) {
-        return null;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return false;
+        return map.keySet().copyOf(collection);
     }
 }

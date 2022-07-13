@@ -3,7 +3,7 @@ package collections;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class ArraySet<E> implements Set<E>{
+public class ArraySet<E> extends AbstractSet<E>{
 
     private final ArrayList<E> arrayList = new ArrayList<>();
 
@@ -59,7 +59,7 @@ public class ArraySet<E> implements Set<E>{
 
     @Override
     public boolean retainAll(Collection<?> collection) {
-        return false;
+        return arrayList.retainAll(collection);
     }
 
     @Override
