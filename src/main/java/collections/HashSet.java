@@ -21,7 +21,28 @@ public class HashSet<E> extends AbstractSet<E>{
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<>() {
+
+            Iterator<E> setIterator = map.keySet().iterator();
+            E previous = null;
+
+            @Override
+            public boolean hasNext() {
+                return setIterator.hasNext();
+            }
+
+            @Override
+            public E next() {
+                previous = setIterator.next();
+                return previous;
+            }
+
+            @Override
+            public void remove() {
+                setIterator.remove();
+                map.remove(previous);
+            }
+        };
     }
 
     @Override
@@ -40,7 +61,7 @@ public class HashSet<E> extends AbstractSet<E>{
     }
 
     @Override
-    public boolean add(E elem) {
+    protected boolean addElem(E elem) {
         return map.put(elem, dummyValue) == null;
     }
 

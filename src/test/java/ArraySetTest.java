@@ -21,7 +21,7 @@ public class ArraySetTest {
     @Test
     public void testAddNullElement() {
         Set<Integer> set = new ArraySet<>();
-        Assertions.assertTrue(set.add(null));
+        Assertions.assertFalse(set.add(null));
     }
 
     @Test

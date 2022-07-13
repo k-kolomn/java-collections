@@ -2,6 +2,14 @@ package collections;
 
 public abstract class AbstractSet<E> implements Set<E>{
 
+    protected abstract boolean addElem(E elem);
+
+    @Override
+    public boolean add(E elem) {
+        if (elem == null) return false;
+        return addElem(elem);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

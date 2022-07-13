@@ -1,11 +1,8 @@
-import collections.ArrayList;
 import collections.HashSet;
-import collections.LinkedSet;
 import collections.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -20,9 +17,8 @@ public class HashSetTest {
 
     @Test
     public void testAddNullElement() {
-        // TODO: 13.07.2022 remove support for null elements in sets
         Set<Integer> set = new HashSet<>();
-        Assertions.assertTrue(set.add(null));
+        Assertions.assertFalse(set.add(null));
     }
 
     @Test

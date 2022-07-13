@@ -34,7 +34,7 @@ public class LinkedSet<E> extends AbstractSet<E>{
     }
 
     @Override
-    public boolean add(E elem) {
+    protected boolean addElem(E elem) {
         for (int i =0; i < linkedList.size(); i++){
             if(contains(elem)){
                 return false;
