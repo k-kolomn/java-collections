@@ -228,13 +228,13 @@ public class HashMapTest {
         map.put(2, 4);
 
         var result1 = map.computeIfPresent(1,
-                (key, value) -> value++
+                (key, value) -> ++value
         );
 
         assertEquals(3, map.get(1));
         assertNotNull(result1);
 
-        var result2 = map.computeIfPresent(2, (key, value) -> value--);
+        var result2 = map.computeIfPresent(2, (key, value) -> --value);
 
 
         assertEquals(3, map.get(2));
