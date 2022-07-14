@@ -33,7 +33,7 @@ public class ArraySet<E> extends AbstractSet<E>{
     }
 
     @Override
-    public boolean add(E elem) {
+    protected boolean addElem(E elem) {
         if (arrayList.contains(elem)){
             return false;
         }

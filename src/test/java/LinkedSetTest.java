@@ -30,6 +30,12 @@ public class LinkedSetTest {
     }
 
     @Test
+    public void testIterator() {
+        new LinkedSet<>().iterator();
+        // TODO: 13.07.22 test this pls -> iterator.next, iterator.hasNext, iterator.remove
+    }
+
+    @Test
     public void testRemove() {
         Set<Integer> set = new LinkedSet<>();
         set.add(1);

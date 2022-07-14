@@ -21,7 +21,7 @@ public class ArraySetTest {
     @Test
     public void testAddNullElement() {
         Set<Integer> set = new ArraySet<>();
-        Assertions.assertTrue(set.add(null));
+        Assertions.assertFalse(set.add(null));
     }
 
     @Test
@@ -30,6 +30,7 @@ public class ArraySetTest {
         set.add(1);
         set.add(2);
         set.iterator();
+        // TODO: 13.07.22 test this pls -> iterator.next, iterator.hasNext, iterator.remove
         Assertions.assertEquals(2, set.size());
     }
 
